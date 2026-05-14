@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { ShowTicketProvider } from './contexts/show-ticket-provider'
+import { ShowTicketProvider } from './contexts/show-ticket-provider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
