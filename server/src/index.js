@@ -1,3 +1,4 @@
+const sequelize = require("./config/database");
 const express = require("express");
 const cors = require("cors");
 
@@ -16,6 +17,14 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/events", eventRoutes);
+
+sequelize.authenticate()
+  .then(() => {
+    console.log("Base de datos conectada");
+  })
+  .catch((error) => {
+    console.log("Error de conexion:", error);
+  });
 
 const PORT = 3000;
 
