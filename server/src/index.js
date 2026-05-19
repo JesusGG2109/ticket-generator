@@ -1,3 +1,4 @@
+const Event = require("./models/Event");
 const sequelize = require("./config/database");
 const express = require("express");
 const cors = require("cors");
@@ -24,6 +25,11 @@ sequelize.authenticate()
   })
   .catch((error) => {
     console.log("Error de conexion:", error);
+  });
+
+sequelize.sync()
+  .then(() => {
+    console.log("Tablas sincronizadas");
   });
 
 const PORT = 3000;

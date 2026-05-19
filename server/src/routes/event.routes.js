@@ -2,10 +2,13 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json({
-    message: "Ruta de eventos funcionando"
-  });
-});
+const {
+  getEvents,
+  createEvent,
+} = require("../controllers/event.controller");
+
+router.get("/", getEvents);
+
+router.post("/", createEvent);
 
 module.exports = router;
