@@ -25,10 +25,31 @@ export const Form = () => {
   const context = useShowTicket();
   const userStore = useUserStore();
 
-  const sendForm: SubmitHandler<Inputs>  = (data) => {
-    
-    const {email, fullName, githubUser} = data;
-    
+  const sendForm: SubmitHandler<Inputs> = async (data) => {
+
+  const { email, fullName, githubUser } = data;
+
+  try {
+
+    const response = await fetch("http://localhost:3000/api/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: fullName,
+        description: `Registro de ${fullName}`,
+        location: githubUser,
+        date: new Date().toISOString()
+      })
+    });
+
+    const result = await response.json();
+
+    console.log("Evento guardado:", result);
+
+    window.location.reload();
+
     context.setShowTicket(true);
 
     userStore.setUser({
@@ -36,8 +57,12 @@ export const Form = () => {
       fullName,
       githubUser,
       url: imageUrl
-    })
+    });
+
+  } catch (error) {
+    console.error("Error guardando evento:", error);
   }
+};
 
   const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
 
