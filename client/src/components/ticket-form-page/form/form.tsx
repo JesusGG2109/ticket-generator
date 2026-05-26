@@ -18,7 +18,7 @@ export const Form = () => {
 
   const {
     register,
-    formState: {errors},
+    formState: { errors },
     handleSubmit
   } = useForm<Inputs>()
 
@@ -27,47 +27,61 @@ export const Form = () => {
 
   const sendForm: SubmitHandler<Inputs> = async (data) => {
 
-  const { email, fullName, githubUser } = data;
+    const { email, fullName, githubUser } = data;
 
-  try {
+    try {
 
-    const response = await fetch("http://localhost:3000/api/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        title: fullName,
-        description: `Registro de ${fullName}`,
-        location: githubUser,
-        date: new Date().toISOString()
-      })
-    });
+      const response = await fetch("http://localhost:3000/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: fullName,
+          description: `Registro de ${fullName}`,
+          location: githubUser,
+          date: new Date().toISOString()
+        })
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    console.log("Evento guardado:", result);
+      if (!response.ok) {
 
-    window.location.reload();
+        console.log(result);
 
-    context.setShowTicket(true);
+        const errorMessage =
+          result.errors?.[0]?.message ||
+          result.message ||
+          "Error creando evento";
 
-    userStore.setUser({
-      email,
-      fullName,
-      githubUser,
-      url: imageUrl
-    });
+        alert(errorMessage);
 
-  } catch (error) {
-    console.error("Error guardando evento:", error);
-  }
-};
+        return;
+      }
 
-  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
+      console.log("Evento guardado:", result);
+
+      window.location.reload();
+
+      context.setShowTicket(true);
+
+      userStore.setUser({
+        email,
+        fullName,
+        githubUser,
+        url: imageUrl
+      });
+
+    } catch (error) {
+      console.error("Error guardando evento:", error);
+    }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 
     const file = e.target.files?.[0]
-    if(file){
+    if (file) {
       const url = URL.createObjectURL(file)
       console.log(file)
       console.log(url)
@@ -91,8 +105,8 @@ export const Form = () => {
           errorMessage={errors.fullName?.message}
         />
         <TextInput
-          {...register("email", { 
-            required: "Email is required", 
+          {...register("email", {
+            required: "Email is required",
             pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
           })}
           label='Email Address'

@@ -1,4 +1,5 @@
 const Event = require("../models/Event");
+const { eventSchema } = require("../validators/eventValidator");
 
 const getEvents = async (req, res) => {
   try {
@@ -14,17 +15,34 @@ const getEvents = async (req, res) => {
 };
 
 const createEvent = async (req, res) => {
+
   try {
-    const event = await Event.create(req.body);
+
+    const validatedData = eventSchema.parse(req.body);
+
+    const event = await Event.create(validatedData);
 
     res.status(201).json(event);
+
   } catch (error) {
+
+    if (error.name === "ZodError") {
+
+      return res.status(400).json({
+        message: "Datos invalidos",
+        errors: error.issues
+      });
+
+    }
+
     res.status(500).json({
       message: "Error creando evento",
-      error,
+      error: error.message,
     });
+
   }
 };
+
 
 const getEventById = async (req, res) => {
   try {
