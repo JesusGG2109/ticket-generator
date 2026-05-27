@@ -3,6 +3,8 @@ require("dotenv").config();
 const { sequelize } = require("./models");
 const express = require("express");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const eventRoutes = require("./routes/event.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -21,6 +23,18 @@ app.get("/", (req, res) => {
 
 app.use("/api/events", eventRoutes);
 app.use("/api/auth", authRoutes);
+
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: "EventHub TECNM API",
+  })
+);
+
+app.get("/api/docs.json", (req, res) => {
+  res.json(swaggerSpec);
+});
 
 sequelize.authenticate()
   .then(() => {
