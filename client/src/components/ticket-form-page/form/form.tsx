@@ -5,6 +5,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useShowTicket } from '../../../hooks/use-show-ticket'
 import { useUserStore } from '../../../store/user'
 import { useState, type ChangeEvent } from 'react'
+import type { Event } from '../../../services/eventService'
 import { api } from '../../../services/api'
 
 type Inputs = {
@@ -32,7 +33,7 @@ export const Form = () => {
 
     try {
 
-      const { data: result } = await api.post("/events", {
+      const { data: result } = await api.post<Event>("/events", {
         title: fullName,
         description: `Registro de ${fullName}`,
         location: githubUser,

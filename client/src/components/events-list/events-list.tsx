@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import {
   getEvents,
   deleteEvent,
-  updateEvent
+  updateEvent,
+  type Event,
 } from '../../services/eventService'
 
 export const EventsList = () => {
 
-  const [events, setEvents] = useState<any[]>([])
+  const [events, setEvents] = useState<Event[]>([])
 
   const [search, setSearch] = useState('')
 
@@ -59,15 +60,15 @@ export const EventsList = () => {
     }
   }
 
-  const handleUpdate = async (id: number) => {
+  const handleUpdate = async (event: Event) => {
 
     try {
 
-      await updateEvent(id, {
+      await updateEvent(event.id, {
         title: newTitle,
-        description: events.find(event => event.id === id)?.description,
-        location: events.find(event => event.id === id)?.location,
-        date: events.find(event => event.id === id)?.date
+        description: event.description,
+        location: event.location,
+        date: event.date,
       })
 
       setEditingId(null)
@@ -153,7 +154,7 @@ export const EventsList = () => {
                       />
 
                       <button
-                        onClick={() => handleUpdate(event.id)}
+                        onClick={() => handleUpdate(event)}
                         className='bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg'
                       >
                         Guardar

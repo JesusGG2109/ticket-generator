@@ -1,21 +1,46 @@
 import { api } from "./api";
 
-export const getEvents = async () => {
-  const response = await api.get("/events");
+export interface Event {
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface EventInput {
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+}
+
+export const getEvents = async (): Promise<Event[]> => {
+  const response = await api.get<Event[]>("/events");
   return response.data;
 };
 
-export const createEvent = async (eventData: any) => {
-  const response = await api.post("/events", eventData);
+export const createEvent = async (eventData: EventInput): Promise<Event> => {
+  const response = await api.post<Event>("/events", eventData);
   return response.data;
 };
 
-export const updateEvent = async (id: number, eventData: any) => {
-  const response = await api.put(`/events/${id}`, eventData);
+export const updateEvent = async (
+  id: number,
+  eventData: Partial<EventInput>
+): Promise<{ message: string; event: Event }> => {
+  const response = await api.put<{ message: string; event: Event }>(
+    `/events/${id}`,
+    eventData
+  );
   return response.data;
 };
 
-export const deleteEvent = async (id: number) => {
-  const response = await api.delete(`/events/${id}`);
+export const deleteEvent = async (
+  id: number
+): Promise<{ message: string }> => {
+  const response = await api.delete<{ message: string }>(`/events/${id}`);
   return response.data;
 };
