@@ -14,11 +14,14 @@ Plataforma fullstack para la gestión de eventos académicos y generación de ti
 - [Funcionalidades](#funcionalidades-implementadas)
 - [Estructura de carpetas](#estructura-de-carpetas)
 - [Endpoints de la API](#endpoints-de-la-api)
+- [Documentación de la API (Swagger)](#documentación-de-la-api-swagger)
 - [Flujo de autenticación](#flujo-de-autenticación)
 - [Requisitos previos](#requisitos-previos)
 - [Instalación](#instalación)
 - [Variables de entorno](#variables-de-entorno)
 - [Ejecución](#ejecución)
+- [Testing](#testing)
+- [Deploy](#deploy)
 - [Screenshots](#screenshots)
 - [Roadmap](#roadmap)
 - [Convenciones de commits](#convenciones-de-commits)
@@ -62,7 +65,12 @@ El proyecto está organizado en dos aplicaciones independientes — `client/` y 
 | **bcryptjs** | Hashing de contraseñas |
 | **jsonwebtoken** | Emisión y verificación de JWT |
 | **dotenv** | Carga de variables de entorno |
-| **cors** | CORS |
+| **cors** | CORS configurable |
+| **swagger-ui-express** | UI interactiva de la API |
+| **swagger-jsdoc** | Generación del spec OpenAPI desde JSDoc |
+| **jest** (dev) | Test runner |
+| **supertest** (dev) | Tests HTTP de la API |
+| **sqlite3** (dev) | Base de datos en memoria para tests |
 | **nodemon** (dev) | Hot reload |
 
 ---
@@ -123,9 +131,15 @@ El proyecto está organizado en dos aplicaciones independientes — `client/` y 
 - [x] Campo `role` en modelo User con default `"user"` (preparado para autorización futura)
 
 ### Infraestructura
-- [x] Variables de entorno con `dotenv` y `.env.example` publicado
+- [x] Variables de entorno con `dotenv` y `.env.example` publicado (cliente y servidor)
 - [x] Estructura modular cliente/servidor independiente
 - [x] Historial Git con commits semánticos separados por funcionalidad
+- [x] **Swagger UI interactiva en `/api/docs`** (OpenAPI 3.0.3)
+- [x] **24 tests automatizados** con Jest + Supertest (SQLite en memoria)
+- [x] **Healthcheck en `/api/health`** para monitoreo
+- [x] CORS configurable vía `CORS_ORIGIN`
+- [x] Script `npm start` para producción
+- [x] Modo `production` omite `sequelize.sync()` (seguro para datos reales)
 
 ---
 
@@ -160,7 +174,8 @@ conference-ticket-generator/
 ├── server/                              # Backend Node.js + Express
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── database.js              # conexión Sequelize ↔ PostgreSQL
+│   │   │   ├── database.js              # conexión Sequelize ↔ Postgres / SQLite en tests
+│   │   │   └── swagger.js               # spec OpenAPI 3.0.3
 │   │   ├── controllers/
 │   │   │   ├── auth.controller.js       # register, login, me
 │   │   │   └── event.controller.js      # CRUD eventos
@@ -171,12 +186,21 @@ conference-ticket-generator/
 │   │   │   ├── User.js                  # name, email, passwordHash, role
 │   │   │   └── index.js                 # barrel central
 │   │   ├── routes/
-│   │   │   ├── auth.routes.js
-│   │   │   └── event.routes.js
+│   │   │   ├── auth.routes.js           # documentadas con @swagger
+│   │   │   └── event.routes.js          # documentadas con @swagger
 │   │   ├── validators/
 │   │   │   ├── authValidator.js         # registerSchema, loginSchema
 │   │   │   └── eventValidator.js
-│   │   └── index.js                     # bootstrap Express + dotenv
+│   │   ├── app.js                       # factory createApp() (testeable)
+│   │   └── index.js                     # entrypoint dev/prod (carga env + listen)
+│   ├── tests/
+│   │   ├── env.js                       # NODE_ENV=test, JWT_SECRET de prueba
+│   │   ├── setup.js                     # globalSetup Jest
+│   │   ├── teardown.js                  # globalTeardown Jest
+│   │   ├── health.test.js               # smoke test bootstrap
+│   │   ├── auth.test.js                 # 12 tests de autenticación
+│   │   └── events.test.js               # 10 tests de CRUD eventos
+│   ├── jest.config.js
 │   ├── .env                             # NO se commitea
 │   ├── .env.example
 │   └── package.json
@@ -211,6 +235,15 @@ conference-ticket-generator/
 
 ¹ El CRUD de eventos quedará protegido cuando se implemente el módulo de roles.
 
+### Utilidades
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/` | Mensaje de bienvenida |
+| `GET` | `/api/health` | Healthcheck (uptime, environment, timestamp) |
+| `GET` | `/api/docs` | UI interactiva Swagger |
+| `GET` | `/api/docs.json` | Spec OpenAPI 3.0.3 en JSON |
+
 ### Códigos de error comunes
 
 | Código | Significado |
@@ -220,6 +253,28 @@ conference-ticket-generator/
 | `404` | Recurso no encontrado |
 | `409` | Email ya registrado |
 | `500` | Error interno del servidor |
+
+---
+
+## Documentación de la API (Swagger)
+
+La API se autodocumenta con **OpenAPI 3.0.3** mediante `swagger-jsdoc` (lee anotaciones `@swagger` en los archivos de rutas) + `swagger-ui-express` (sirve la UI).
+
+| Ruta | Para qué |
+|---|---|
+| [`/api/docs`](http://localhost:3000/api/docs) | UI interactiva: probar endpoints, ver schemas, autenticar con JWT |
+| [`/api/docs.json`](http://localhost:3000/api/docs.json) | Spec OpenAPI completo (importable a Postman, Insomnia, Stoplight) |
+
+**Cómo autenticar peticiones desde la UI:**
+
+1. `POST /auth/login` o `POST /auth/register` desde la UI.
+2. Copiar el `token` del response.
+3. Click en **Authorize** (candado arriba a la derecha) → pegar `<token>` → Authorize.
+4. Los endpoints con icono de candado (ej. `GET /auth/me`) ya enviarán `Authorization: Bearer <token>`.
+
+**Schemas definidos:** `User`, `RegisterRequest`, `LoginRequest`, `AuthResponse`, `Event`, `EventInput`, `Error`, `ValidationError`.
+
+**Responses comunes reusables:** `BadRequest`, `Unauthorized`, `NotFound`, `Conflict`, `ServerError`.
 
 ---
 
@@ -313,8 +368,11 @@ cp .env.example .env   # en Windows: copy .env.example .env
 
 Editar `server/.env` con los valores locales:
 
+**Backend** (`server/.env`):
+
 | Variable | Descripción | Ejemplo |
 |---|---|---|
+| `NODE_ENV` | Entorno (`development` / `production` / `test`) | `development` |
 | `PORT` | Puerto donde escucha Express | `3000` |
 | `DB_NAME` | Nombre de la base de datos PostgreSQL | `eventhub_tecnm` |
 | `DB_USER` | Usuario PostgreSQL | `postgres` |
@@ -323,8 +381,15 @@ Editar `server/.env` con los valores locales:
 | `DB_PORT` | Puerto PostgreSQL | `5432` |
 | `JWT_SECRET` | Secreto para firmar JWT (¡cambiar en producción!) | `cadena_larga_aleatoria` |
 | `JWT_EXPIRES_IN` | Tiempo de vida del token | `7d` |
+| `CORS_ORIGIN` | Origen(es) permitido(s) — `*` o lista separada por comas | `*` / `https://app.com,https://www.app.com` |
 
-> **El archivo `.env` está incluido en `.gitignore` y NO debe commitearse nunca.**
+**Frontend** (`client/.env`):
+
+| Variable | Descripción | Ejemplo |
+|---|---|---|
+| `VITE_API_URL` | URL base de la API. Si se omite, usa `http://localhost:3000/api` | `https://api.tudominio.com/api` |
+
+> **Los archivos `.env` están incluidos en `.gitignore` y NO deben commitearse nunca.**
 
 ---
 
@@ -370,6 +435,75 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 ---
 
+## Testing
+
+El backend tiene tests automatizados con **Jest 30** + **Supertest** corriendo contra una base **SQLite en memoria** (vía Sequelize), de modo que no se necesita Postgres para correr la suite y los tests se aíslan entre sí.
+
+### Ejecutar
+
+```bash
+cd server
+npm test            # corre toda la suite
+npm run test:watch  # modo watch
+```
+
+### Suites incluidas
+
+| Archivo | Cobertura | Tests |
+|---|---|---|
+| `tests/health.test.js` | Bootstrap de Express + dialect SQLite en tests | 2 |
+| `tests/auth.test.js` | Register, login, GET /me (felices, errores, hashing bcrypt, token format) | 12 |
+| `tests/events.test.js` | CRUD eventos (GET lista, GET id, POST, PUT, DELETE — happy y 400/404) | 10 |
+| **Total** | | **24** |
+
+### Cómo funciona el entorno de test
+
+- `tests/env.js` establece `NODE_ENV=test`, `JWT_SECRET` de prueba.
+- `server/src/config/database.js` detecta `NODE_ENV === "test"` y usa `sqlite::memory:` en vez de Postgres.
+- Cada suite hace `sequelize.sync({ force: true })` y un `truncate` por `beforeEach` para aislar tests.
+- `server/src/app.js` exporta una factory `createApp()` que Supertest importa sin levantar un puerto real.
+
+---
+
+## Deploy
+
+El proyecto está **listo para desplegar** en plataformas como **Render**, **Railway**, **Fly.io**, **Heroku** (backend) y **Vercel**, **Netlify**, **Cloudflare Pages** (frontend). Aún no se ha desplegado; quedan listos los archivos y scripts.
+
+### Backend
+
+```bash
+cd server
+npm install --omit=dev
+NODE_ENV=production npm start
+```
+
+**Lo que cambia en producción:**
+
+- `sequelize.sync()` **NO** se ejecuta (evita destruir datos por accidente). Para cambios de esquema en prod, usar migraciones con `sequelize-cli`.
+- `CORS_ORIGIN` debe definirse explícitamente (ej. `https://tu-frontend.vercel.app`) para no aceptar peticiones de cualquier origen.
+- `JWT_SECRET` debe ser una cadena larga y aleatoria distinta de la de desarrollo.
+
+**Healthcheck para load balancers:** `GET /api/health` devuelve `{ status, uptime, environment, timestamp }`.
+
+### Frontend
+
+```bash
+cd client
+npm install
+npm run build  # genera dist/
+```
+
+Subir `dist/` a Vercel/Netlify. Definir la variable `VITE_API_URL` apuntando a la URL pública del backend, ej. `https://eventhub-api.onrender.com/api`.
+
+### Variables a configurar por plataforma
+
+| Plataforma | Variables que hay que definir |
+|---|---|
+| **Render / Railway** (backend) | `NODE_ENV=production`, `DB_*`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `CORS_ORIGIN`, `PORT` (algunas plataformas lo inyectan solas) |
+| **Vercel / Netlify** (frontend) | `VITE_API_URL` apuntando al backend desplegado |
+
+---
+
 ## Screenshots
 
 > _Placeholders — reemplazar con capturas reales antes de la entrega._
@@ -386,13 +520,14 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 ## Roadmap
 
-### En curso
-- [ ] Documentación técnica detallada por módulo
-- [ ] Testing manual end-to-end del flujo de auth
+### Completado recientemente
+- [x] Documentación OpenAPI/Swagger de la API
+- [x] Tests automatizados backend (Jest + Supertest, 24 tests)
+- [x] Preparación para deploy (CORS, healthcheck, scripts, env vars)
+- [x] Limpieza técnica (axios unificado, tipos sin `any`, flujo de ticket arreglado)
 
 ### Próximas iteraciones (orden tentativo)
 - [ ] **Roles y autorización** — proteger CRUD de eventos según `user.role` (`user` / `admin`)
-- [ ] **Refactor del formulario de ticket** — separar lógica de ticket de los endpoints de eventos
 - [ ] **Asociación User ↔ Event** — registrar quién creó cada evento, mostrar "mis eventos"
 - [ ] **Dashboard de administración** — métricas básicas (eventos activos, usuarios registrados)
 - [ ] **QR en tickets** — código único escaneable por evento
@@ -402,9 +537,9 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 ### Mejoras técnicas pendientes
 - [ ] Tipos compartidos entre cliente y servidor (carpeta `shared/` o paquete)
-- [ ] Tests automatizados (Vitest en cliente, Jest en servidor)
-- [ ] CI básico (GitHub Actions: lint + build)
-- [ ] Documentación OpenAPI/Swagger de la API
+- [ ] Tests automatizados frontend (Vitest + React Testing Library)
+- [ ] CI básico (GitHub Actions: lint + build + test)
+- [ ] Migraciones Sequelize (en lugar de `sync()`) para producción
 - [ ] Manejo centralizado de errores backend (middleware error handler)
 
 ---
@@ -414,6 +549,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 Cada funcionalidad se commitea por separado para facilitar revisión y rollback. Los mensajes son cortos, en español, en imperativo y describen la unidad de cambio:
 
 ```
+# Autenticación
 Configuracion de variables de entorno con dotenv
 Modelo User y configuracion de autenticacion
 Validaciones y manejo de errores en autenticacion
@@ -423,6 +559,19 @@ Servicio de autenticacion y axios con token en frontend
 Store de autenticacion con persistencia
 Pantallas login y register con autenticacion
 Proteccion de rutas privadas y navbar dinamica
+
+# Limpieza técnica
+Refactor de llamadas HTTP con axios
+Mejora de tipado y eliminacion de any
+Limpieza de flujo de formularios y recarga manual
+
+# Documentación + testing + deploy
+Configuracion de Swagger y documentacion de API
+Configuracion de Jest y Supertest
+Tests de autenticacion
+Tests de eventos
+Preparacion del proyecto para deploy
+Actualizacion de documentacion tecnica
 ```
 
 ### Ramas
