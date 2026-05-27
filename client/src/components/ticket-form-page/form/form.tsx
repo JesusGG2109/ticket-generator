@@ -5,6 +5,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useShowTicket } from '../../../hooks/use-show-ticket'
 import { useUserStore } from '../../../store/user'
 import { useState, type ChangeEvent } from 'react'
+import { api } from '../../../services/api'
 
 type Inputs = {
   fullName: string;
@@ -31,34 +32,12 @@ export const Form = () => {
 
     try {
 
-      const response = await fetch("http://localhost:3000/api/events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title: fullName,
-          description: `Registro de ${fullName}`,
-          location: githubUser,
-          date: new Date().toISOString()
-        })
+      const { data: result } = await api.post("/events", {
+        title: fullName,
+        description: `Registro de ${fullName}`,
+        location: githubUser,
+        date: new Date().toISOString(),
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-
-        console.log(result);
-
-        const errorMessage =
-          result.errors?.[0]?.message ||
-          result.message ||
-          "Error creando evento";
-
-        alert(errorMessage);
-
-        return;
-      }
 
       console.log("Evento guardado:", result);
 
@@ -73,7 +52,14 @@ export const Form = () => {
         url: imageUrl
       });
 
-    } catch (error) {
+    } catch (error: any) {
+
+      const errorMessage =
+        error?.response?.data?.errors?.[0]?.message ||
+        error?.response?.data?.message ||
+        "Error creando evento";
+
+      alert(errorMessage);
       console.error("Error guardando evento:", error);
     }
   };
