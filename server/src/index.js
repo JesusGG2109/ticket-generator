@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const Event = require("./models/Event");
 const sequelize = require("./config/database");
 const express = require("express");
@@ -32,7 +34,7 @@ sequelize.sync()
     console.log("Tablas sincronizadas");
   });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
