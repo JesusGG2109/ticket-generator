@@ -5,6 +5,8 @@ const createApp = require("./app");
 
 const app = createApp();
 
+const isProd = process.env.NODE_ENV === "production";
+
 sequelize
   .authenticate()
   .then(() => {
@@ -14,9 +16,15 @@ sequelize
     console.log("Error de conexion:", error);
   });
 
-sequelize.sync().then(() => {
-  console.log("Tablas sincronizadas");
-});
+if (!isProd) {
+  sequelize.sync().then(() => {
+    console.log("Tablas sincronizadas");
+  });
+} else {
+  console.log(
+    "Modo produccion: omitiendo sequelize.sync(). Usar migraciones para cambios de esquema."
+  );
+}
 
 const PORT = process.env.PORT || 3000;
 
