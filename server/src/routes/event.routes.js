@@ -10,6 +10,8 @@ const {
   deleteEvent
 } = require("../controllers/event.controller");
 
+const validateNumericId = require("../middlewares/validateId.middleware");
+
 /**
  * @swagger
  * /events:
@@ -80,7 +82,7 @@ router.post("/", createEvent);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get("/:id", getEventById);
+router.get("/:id", validateNumericId, getEventById);
 
 /**
  * @swagger
@@ -118,7 +120,7 @@ router.get("/:id", getEventById);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.put("/:id", updateEvent);
+router.put("/:id", validateNumericId, updateEvent);
 
 /**
  * @swagger
@@ -148,6 +150,6 @@ router.put("/:id", updateEvent);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.delete("/:id", deleteEvent);
+router.delete("/:id", validateNumericId, deleteEvent);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const eventRoutes = require("./routes/event.routes");
 const authRoutes = require("./routes/auth.routes");
+const errorMiddleware = require("./middlewares/error.middleware");
 
 const createApp = () => {
   const app = express();
@@ -48,6 +49,12 @@ const createApp = () => {
   app.get("/api/docs.json", (req, res) => {
     res.json(swaggerSpec);
   });
+
+  app.use((req, res) => {
+    res.status(404).json({ message: "Recurso no encontrado" });
+  });
+
+  app.use(errorMiddleware);
 
   return app;
 };
