@@ -5,8 +5,6 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useShowTicket } from '../../../hooks/use-show-ticket'
 import { useUserStore } from '../../../store/user'
 import { useState, type ChangeEvent } from 'react'
-import type { Event } from '../../../services/eventService'
-import { api } from '../../../services/api'
 
 type Inputs = {
   fullName: string;
@@ -27,42 +25,18 @@ export const Form = () => {
   const context = useShowTicket();
   const userStore = useUserStore();
 
-  const sendForm: SubmitHandler<Inputs> = async (data) => {
+  const sendForm: SubmitHandler<Inputs> = (data) => {
 
     const { email, fullName, githubUser } = data;
 
-    try {
+    userStore.setUser({
+      email,
+      fullName,
+      githubUser,
+      url: imageUrl
+    });
 
-      const { data: result } = await api.post<Event>("/events", {
-        title: fullName,
-        description: `Registro de ${fullName}`,
-        location: githubUser,
-        date: new Date().toISOString(),
-      });
-
-      console.log("Evento guardado:", result);
-
-      window.location.reload();
-
-      context.setShowTicket(true);
-
-      userStore.setUser({
-        email,
-        fullName,
-        githubUser,
-        url: imageUrl
-      });
-
-    } catch (error: any) {
-
-      const errorMessage =
-        error?.response?.data?.errors?.[0]?.message ||
-        error?.response?.data?.message ||
-        "Error creando evento";
-
-      alert(errorMessage);
-      console.error("Error guardando evento:", error);
-    }
+    context.setShowTicket(true);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +44,6 @@ export const Form = () => {
     const file = e.target.files?.[0]
     if (file) {
       const url = URL.createObjectURL(file)
-      console.log(file)
-      console.log(url)
       setImageUrl(url)
     }
 
