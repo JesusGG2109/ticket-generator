@@ -1,23 +1,21 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:3000/api/events";
+import { api } from "./api";
 
 export const getEvents = async () => {
-  const response = await axios.get(API_URL);
+  const response = await api.get("/events");
   return response.data;
 };
 
 export const createEvent = async (eventData: any) => {
-  const response = await axios.post(API_URL, eventData);
+  const response = await api.post("/events", eventData);
   return response.data;
 };
 
 export const updateEvent = async (id: number, eventData: any) => {
-  const response = await axios.put(`${API_URL}/${id}`, eventData);
+  const response = await api.put(`/events/${id}`, eventData);
   return response.data;
 };
 
 export const deleteEvent = async (id: number) => {
-  const response = await axios.delete(`${API_URL}/${id}`);
+  const response = await api.delete(`/events/${id}`);
   return response.data;
 };
