@@ -8,18 +8,25 @@ interface UserData {
 }
 
 interface User extends UserData {
-  setUser: (user:UserData)=> void
+  setUser: (user: UserData) => void;
+  clearUser: () => void;
 }
 
-export const useUserStore = create<User>()((set)=>({
-  email: "",
-  fullName: "",
-  githubUser: "",
-  url: "",
-  setUser: (user:UserData) => set(()=>({
-    email: user.email,
-    fullName: user.fullName,
-    githubUser: user.githubUser,
-    url: user.url
-  }))
-}))
+const empty: UserData = {
+  email: '',
+  fullName: '',
+  githubUser: '',
+  url: '',
+};
+
+export const useUserStore = create<User>()((set) => ({
+  ...empty,
+  setUser: (user: UserData) =>
+    set(() => ({
+      email: user.email,
+      fullName: user.fullName,
+      githubUser: user.githubUser,
+      url: user.url,
+    })),
+  clearUser: () => set(() => empty),
+}));

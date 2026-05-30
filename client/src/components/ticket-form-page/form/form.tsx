@@ -5,48 +5,82 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useShowTicket } from '../../../hooks/use-show-ticket'
 import { useUserStore } from '../../../store/user'
 import { useState, type ChangeEvent } from 'react'
+import { createTicket } from '../../../services/ticketService'
 
 type Inputs = {
-  fullName: string;
-  email: string;
-  githubUser: string;
+  fullName: string
+  email: string
+  githubUser: string
 }
 
-export const Form = () => {
+/**
+ * Convierte un File a data URL (base64) — serializable y persistible en backend.
+ * No usamos URL.createObjectURL porque devuelve blob URLs efimeras del navegador.
+ */
+const fileToDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result || ''))
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
 
-  const [imageUrl, setImageUrl] = useState<string>('')
+export const Form = () => {
+  const [imageDataUrl, setImageDataUrl] = useState<string>('')
+  const [submitting, setSubmitting] = useState(false)
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
   } = useForm<Inputs>()
 
-  const context = useShowTicket();
-  const userStore = useUserStore();
+  const context = useShowTicket()
+  const userStore = useUserStore()
 
-  const sendForm: SubmitHandler<Inputs> = (data) => {
+  const sendForm: SubmitHandler<Inputs> = async (data) => {
+    const { email, fullName, githubUser } = data
 
-    const { email, fullName, githubUser } = data;
+    setSubmitting(true)
+    setServerError(null)
 
-    userStore.setUser({
-      email,
-      fullName,
-      githubUser,
-      url: imageUrl
-    });
+    try {
+      await createTicket({
+        name: fullName,
+        email,
+        github: githubUser || null,
+        avatar: imageDataUrl || null,
+      })
 
-    context.setShowTicket(true);
-  };
+      userStore.setUser({
+        email,
+        fullName,
+        githubUser,
+        url: imageDataUrl,
+      })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-
-    const file = e.target.files?.[0]
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setImageUrl(url)
+      context.setShowTicket(true)
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.errors?.[0]?.message ||
+        error?.response?.data?.message ||
+        'Error al generar ticket'
+      setServerError(message)
+    } finally {
+      setSubmitting(false)
     }
+  }
 
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const dataUrl = await fileToDataUrl(file)
+      setImageDataUrl(dataUrl)
+    } catch {
+      setServerError('No se pudo procesar la imagen')
+    }
   }
 
   return (
@@ -59,32 +93,43 @@ export const Form = () => {
         className='relative rounded-2xl border border-white/[0.08] bg-[#0B1026]/60 p-6 backdrop-blur-xl sm:p-8'
         onSubmit={handleSubmit(sendForm)}
       >
-        <UploadInput url={imageUrl} onChange={handleChange} />
+        <UploadInput url={imageDataUrl} onChange={handleChange} />
         <div className='flex flex-col gap-5'>
           <TextInput
-            {...register("fullName", { required: "Full Name is required" })}
+            {...register('fullName', { required: 'Full Name is required' })}
             label='Full Name'
             placeholder='Jonathan Kirstof'
             isError={errors.fullName?.type === 'required'}
             errorMessage={errors.fullName?.message}
           />
           <TextInput
-            {...register("email", {
-              required: "Email is required",
-              pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+            {...register('email', {
+              required: 'Email is required',
+              pattern:
+                /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
             })}
             label='Email Address'
             placeholder='jonatan@email.com'
             type='email'
-            isError={errors.email?.type === 'required' || errors.email?.type === 'pattern'}
+            isError={
+              errors.email?.type === 'required' ||
+              errors.email?.type === 'pattern'
+            }
             errorMessage={errors.email?.message || 'Please provide a valid email'}
           />
           <TextInput
-            {...register("githubUser")}
+            {...register('githubUser')}
             label='Github Username'
             placeholder='@jonatankristof0101'
           />
-          <Button />
+
+          {serverError && (
+            <div className='rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-2.5 text-xs text-red-200 backdrop-blur-sm'>
+              {serverError}
+            </div>
+          )}
+
+          <Button submitting={submitting} />
         </div>
       </form>
     </div>
