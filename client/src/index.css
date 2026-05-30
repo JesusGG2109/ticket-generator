@@ -9,6 +9,28 @@
 }
 
 @theme {
+  /* Espacio profundo */
+  --color-deep-950: #050816;
+  --color-deep-900: #0B1026;
+  --color-deep-800: #121A3A;
+  --color-deep-700: #1A2347;
+
+  /* Acentos tech */
+  --color-violet-soft: #7C3AED;
+  --color-violet-bright: #8B5CF6;
+  --color-blue-soft: #60A5FA;
+  --color-cyan-tech: #22D3EE;
+
+  /* Texto */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #D1D5DB;
+  --color-text-muted: #94A3B8;
+
+  /* Bordes y glass */
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-bg: rgba(255, 255, 255, 0.03);
+
+  /* Legado (mantener para componentes no migrados) */
   --color-Neutral-0: hsl(0, 0%, 100%);
   --color-Neutral-300: hsl(252, 6%, 83%);
   --color-Neutral-500: hsl(245, 15%, 58%);
@@ -17,9 +39,44 @@
   --color-Orange-500: hsl(7, 88%, 67%);
   --color-Orange-700: hsl(7, 71%, 60%);
 
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    "JetBrains Mono", "Fira Code", Menlo, monospace;
   --font-Inconsolata: Inconsolata;
 }
 
-body{
-  @apply text-Neutral-0 font-Inconsolata
+html, body, #root {
+  background-color: var(--color-deep-950);
+  color: var(--color-text-primary);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss01";
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-deep-950);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.25);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.45);
 }
