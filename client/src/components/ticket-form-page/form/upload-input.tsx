@@ -1,35 +1,56 @@
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent } from 'react';
 
 interface Props {
   url: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const UploadInput = ({
-  onChange, 
-  url='',
-}: Props) => {
-
-  
-
+export const UploadInput = ({ onChange, url = '' }: Props) => {
   return (
-    <div className='mb-4'>
-      <p className='mb-4 text-xl'>Upload Avatar</p>
-      <label className='border-3 border-dashed px-4 py-3 block w-full border-Neutral-0 bg-Neutral-700/50 hover:bg-Neutral-700 rounded-xl cursor-pointer mb-2'>
-        <div className='bg-Neutral-700 size-[50px] grid place-content-center rounded-xl border-2 border-Neutral-500 mb-2 mx-auto overflow-hidden'>
+    <div className='mb-6 flex flex-col gap-2'>
+      <p className='text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase'>
+        Avatar
+      </p>
 
-          <img src={url == '' ? '/assets/images/icon-upload.svg': url} alt="icon upload" />
-
+      <label className='group relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border border-dashed border-white/[0.14] bg-white/[0.02] px-4 py-6 transition-all hover:border-[#8B5CF6]/40 hover:bg-white/[0.04]'>
+        <div className='relative grid h-14 w-14 place-content-center overflow-hidden rounded-xl border border-white/[0.08] bg-gradient-to-br from-[#0B1026] to-[#121A3A]'>
+          {url ? (
+            <img
+              src={url}
+              alt='Avatar preview'
+              className='h-full w-full object-cover'
+            />
+          ) : (
+            <svg
+              className='h-6 w-6 text-[#8B5CF6]'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+            >
+              <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+              <polyline points='17 8 12 3 7 8' />
+              <line x1='12' y1='3' x2='12' y2='15' />
+            </svg>
+          )}
         </div>
 
-        <input className='hidden' type="file" onChange={onChange} />
-        
-        <span className='text-center block text-gray-500 text-sm'>Drag and drop or click to upload</span>
+        <input className='hidden' type='file' accept='image/*' onChange={onChange} />
+
+        <span className='text-center text-xs text-[#94A3B8]'>
+          {url ? 'Imagen cargada — click para reemplazar' : 'Arrastra o haz click para subir'}
+        </span>
       </label>
-      <div className='flex gap-2'>
-        <img src="/assets/images/icon-info.svg" alt="icon info" />
-        <p>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-      </div>
+
+      <p className='flex items-center gap-1.5 text-[11px] text-[#94A3B8]/80'>
+        <svg className='h-3 w-3' viewBox='0 0 16 16' fill='none' stroke='currentColor' strokeWidth='1.5'>
+          <circle cx='8' cy='8' r='6' />
+          <path d='M8 11V8M8 5.5V5.4' strokeLinecap='round' />
+        </svg>
+        SVG, PNG, JPG o GIF — maximo 800×400px
+      </p>
     </div>
-  )
-}
+  );
+};

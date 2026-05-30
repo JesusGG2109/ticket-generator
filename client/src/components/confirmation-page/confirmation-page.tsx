@@ -3,9 +3,11 @@ import { Ticket } from './ticket'
 
 export const ConfirmationPage = () => {
   return (
-    <section>
+    <section className='mx-auto max-w-3xl py-12 text-center sm:py-16'>
       <Congrats />
-      <Ticket />
+      <div className='mt-12'>
+        <Ticket />
+      </div>
     </section>
   )
 }

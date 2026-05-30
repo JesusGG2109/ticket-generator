@@ -50,37 +50,43 @@ export const Form = () => {
   }
 
   return (
-    <form className='' onSubmit={handleSubmit(sendForm)}>
-      <UploadInput
-        url={imageUrl}
-        onChange={handleChange}
+    <div className='relative'>
+      <div
+        aria-hidden='true'
+        className='absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/25 via-transparent to-[#22D3EE]/20 blur-md'
       />
-      <div className='flex flex-col gap-6'>
-        <TextInput
-          {...register("fullName", { required: "Full Name is required" })}
-          label='Full Name'
-          placeholder='Jonathan Kirstof'
-          isError={errors.fullName?.type === 'required'}
-          errorMessage={errors.fullName?.message}
-        />
-        <TextInput
-          {...register("email", {
-            required: "Email is required",
-            pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-          })}
-          label='Email Address'
-          placeholder='jonatan@email.com'
-          type='email'
-          isError={errors.email?.type === 'required' || errors.email?.type === 'pattern'}
-          errorMessage={errors.email?.message || 'Please provide a valid email'}
-        />
-        <TextInput
-          {...register("githubUser")}
-          label='Github Username'
-          placeholder='@jonatankristof0101'
-        />
-        <Button />
-      </div>
-    </form>
+      <form
+        className='relative rounded-2xl border border-white/[0.08] bg-[#0B1026]/60 p-6 backdrop-blur-xl sm:p-8'
+        onSubmit={handleSubmit(sendForm)}
+      >
+        <UploadInput url={imageUrl} onChange={handleChange} />
+        <div className='flex flex-col gap-5'>
+          <TextInput
+            {...register("fullName", { required: "Full Name is required" })}
+            label='Full Name'
+            placeholder='Jonathan Kirstof'
+            isError={errors.fullName?.type === 'required'}
+            errorMessage={errors.fullName?.message}
+          />
+          <TextInput
+            {...register("email", {
+              required: "Email is required",
+              pattern: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+            })}
+            label='Email Address'
+            placeholder='jonatan@email.com'
+            type='email'
+            isError={errors.email?.type === 'required' || errors.email?.type === 'pattern'}
+            errorMessage={errors.email?.message || 'Please provide a valid email'}
+          />
+          <TextInput
+            {...register("githubUser")}
+            label='Github Username'
+            placeholder='@jonatankristof0101'
+          />
+          <Button />
+        </div>
+      </form>
+    </div>
   )
 }
