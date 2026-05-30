@@ -6,6 +6,7 @@ import { HomePage } from './pages/home-page'
 import { EventsPage } from './pages/events-page'
 import { LoginPage } from './pages/login-page'
 import { RegisterPage } from './pages/register-page'
+import { MyTicketsPage } from './pages/my-tickets-page'
 
 import { ProtectedRoute } from './components/auth/protected-route'
 import { useAuthStore } from './store/auth'
@@ -68,6 +69,7 @@ const Navbar = () => {
         <nav className='flex items-center gap-1 sm:gap-2'>
           <NavItem to='/' label='Inicio' />
           <NavItem to='/eventos' label='Eventos' />
+          {isAuthenticated && <NavItem to='/mis-tickets' label='Mis Tickets' />}
         </nav>
 
         <div className='flex items-center gap-2'>
@@ -127,6 +129,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EventsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/mis-tickets'
+              element={
+                <ProtectedRoute>
+                  <MyTicketsPage />
                 </ProtectedRoute>
               }
             />
