@@ -1,13 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: Inconsolata;
-  font-style: normal;
-  font-weight: 400 500 700 800;
-  font-display: swap;
-  src: url("/assets/fonts/Inconsolata-VariableFont_wdth_wght.ttf") format("woff2");
-}
-
 @theme {
   /* Espacio profundo */
   --color-deep-950: #050816;
@@ -44,7 +36,6 @@
     "Helvetica Neue", Arial, sans-serif;
   --font-mono:
     "JetBrains Mono", "Fira Code", Menlo, monospace;
-  --font-Inconsolata: Inconsolata;
 }
 
 html, body, #root {
