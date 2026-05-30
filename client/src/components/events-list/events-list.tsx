@@ -22,6 +22,7 @@ export const EventsList = () => {
   const [newTitle, setNewTitle] = useState('')
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     loadEvents()
@@ -29,11 +30,14 @@ export const EventsList = () => {
 
   const loadEvents = async () => {
     setLoading(true)
+    setError(null)
     try {
       const data = await getEvents()
       setEvents(data)
-    } catch (error) {
-      console.error(error)
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message || 'No se pudieron cargar tus eventos'
+      )
     } finally {
       setLoading(false)
     }
@@ -45,8 +49,8 @@ export const EventsList = () => {
     try {
       await deleteEvent(id)
       loadEvents()
-    } catch (error) {
-      console.error(error)
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'No se pudo eliminar el evento')
     }
   }
 
@@ -61,8 +65,8 @@ export const EventsList = () => {
       setEditingId(null)
       setNewTitle('')
       loadEvents()
-    } catch (error) {
-      console.error(error)
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'No se pudo actualizar el evento')
     }
   }
 
@@ -162,6 +166,12 @@ export const EventsList = () => {
           }}
           onCancel={() => setShowForm(false)}
         />
+      )}
+
+      {error && (
+        <div className='mb-6 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200 backdrop-blur-sm'>
+          {error}
+        </div>
       )}
 
       {/* Empty states */}
