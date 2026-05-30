@@ -7,26 +7,33 @@ const {
   createEvent,
   getEventById,
   updateEvent,
-  deleteEvent
+  deleteEvent,
 } = require("../controllers/event.controller");
 
+const authMiddleware = require("../middlewares/auth.middleware");
 const validateNumericId = require("../middlewares/validateId.middleware");
+
+router.use(authMiddleware);
 
 /**
  * @swagger
  * /events:
  *   get:
  *     tags: [Events]
- *     summary: Lista todos los eventos
+ *     summary: Lista los eventos del usuario autenticado
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de eventos
+ *         description: Lista de eventos propiedad del usuario
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Event'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
@@ -37,7 +44,9 @@ router.get("/", getEvents);
  * /events:
  *   post:
  *     tags: [Events]
- *     summary: Crea un evento
+ *     summary: Crea un evento asociado al usuario autenticado
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -53,6 +62,8 @@ router.get("/", getEvents);
  *               $ref: '#/components/schemas/Event'
  *       400:
  *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
@@ -63,7 +74,9 @@ router.post("/", createEvent);
  * /events/{id}:
  *   get:
  *     tags: [Events]
- *     summary: Obtiene un evento por ID
+ *     summary: Obtiene un evento del usuario por ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -77,6 +90,14 @@ router.post("/", createEvent);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Event'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         description: El evento existe pero pertenece a otro usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:
@@ -89,7 +110,9 @@ router.get("/:id", validateNumericId, getEventById);
  * /events/{id}:
  *   put:
  *     tags: [Events]
- *     summary: Actualiza un evento existente
+ *     summary: Actualiza un evento propio del usuario
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -115,6 +138,14 @@ router.get("/:id", validateNumericId, getEventById);
  *                   example: Evento actualizado
  *                 event:
  *                   $ref: '#/components/schemas/Event'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         description: El evento pertenece a otro usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:
@@ -127,7 +158,9 @@ router.put("/:id", validateNumericId, updateEvent);
  * /events/{id}:
  *   delete:
  *     tags: [Events]
- *     summary: Elimina un evento
+ *     summary: Elimina un evento propio del usuario
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -145,6 +178,14 @@ router.put("/:id", validateNumericId, updateEvent);
  *                 message:
  *                   type: string
  *                   example: Evento eliminado
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         description: El evento pertenece a otro usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:
