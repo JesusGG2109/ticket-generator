@@ -21,6 +21,16 @@ const Event = sequelize.define("Event", {
     type: DataTypes.DATE,
     allowNull: false,
   },
+
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: "Users",
+      key: "id",
+    },
+    onDelete: "SET NULL",
+  },
 });
 
 module.exports = Event;
