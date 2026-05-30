@@ -6,6 +6,7 @@ import {
   updateEvent,
   type Event,
 } from '../../services/eventService'
+import { EventForm } from './event-form'
 
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('es-MX', {
@@ -20,6 +21,7 @@ export const EventsList = () => {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [newTitle, setNewTitle] = useState('')
   const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     loadEvents()
@@ -80,43 +82,112 @@ export const EventsList = () => {
             </span>
           </div>
           <h1 className='text-4xl font-bold tracking-tight text-white sm:text-5xl'>
-            Eventos registrados
+            Mis eventos
           </h1>
           <p className='mt-2 text-sm text-[#94A3B8]'>
             {loading
               ? 'Cargando eventos...'
-              : `${events.length} ${events.length === 1 ? 'evento disponible' : 'eventos disponibles'}`}
+              : `${events.length} ${events.length === 1 ? 'evento registrado' : 'eventos registrados'}`}
           </p>
         </div>
 
-        <div className='relative w-full sm:w-72'>
-          <svg
-            className='pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#94A3B8]'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
+        <div className='flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center'>
+          <div className='relative w-full sm:w-72'>
+            <svg
+              className='pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#94A3B8]'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+            >
+              <circle cx='11' cy='11' r='7' />
+              <path d='m21 21-4.3-4.3' />
+            </svg>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className='w-full rounded-full border border-white/[0.08] bg-white/[0.03] py-2.5 pr-4 pl-10 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20'
+              placeholder='Buscar por titulo...'
+            />
+          </div>
+
+          <button
+            onClick={() => setShowForm((s) => !s)}
+            className='inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#22D3EE] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_-4px_rgba(139,92,246,0.5)] transition-all hover:shadow-[0_0_28px_-2px_rgba(139,92,246,0.75)]'
           >
-            <circle cx='11' cy='11' r='7' />
-            <path d='m21 21-4.3-4.3' />
-          </svg>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className='w-full rounded-full border border-white/[0.08] bg-white/[0.03] py-2.5 pr-4 pl-10 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20'
-            placeholder='Buscar por titulo...'
-          />
+            {showForm ? (
+              <>
+                <svg
+                  className='h-4 w-4'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2.5'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                >
+                  <line x1='18' y1='6' x2='6' y2='18' />
+                  <line x1='6' y1='6' x2='18' y2='18' />
+                </svg>
+                Cerrar
+              </>
+            ) : (
+              <>
+                <svg
+                  className='h-4 w-4'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2.5'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                >
+                  <line x1='12' y1='5' x2='12' y2='19' />
+                  <line x1='5' y1='12' x2='19' y2='12' />
+                </svg>
+                Nuevo evento
+              </>
+            )}
+          </button>
         </div>
       </div>
 
+      {showForm && (
+        <EventForm
+          onCreated={() => {
+            setShowForm(false)
+            loadEvents()
+          }}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
+
       {/* Empty states */}
-      {!loading && events.length === 0 && (
+      {!loading && events.length === 0 && !showForm && (
         <div className='rounded-2xl border border-white/[0.06] bg-white/[0.02] p-12 text-center backdrop-blur-sm'>
           <p className='text-sm text-[#94A3B8]'>
-            Aun no hay eventos registrados.
+            Aun no tienes eventos registrados.
           </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className='mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#22D3EE] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_-4px_rgba(139,92,246,0.5)] transition-all hover:shadow-[0_0_28px_-2px_rgba(139,92,246,0.75)]'
+          >
+            <svg
+              className='h-4 w-4'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2.5'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+            >
+              <line x1='12' y1='5' x2='12' y2='19' />
+              <line x1='5' y1='12' x2='19' y2='12' />
+            </svg>
+            Crear mi primer evento
+          </button>
         </div>
       )}
 
