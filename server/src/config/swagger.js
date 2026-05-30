@@ -34,6 +34,10 @@ const definition = {
       name: "Events",
       description: "CRUD de eventos academicos",
     },
+    {
+      name: "Tickets",
+      description: "Tickets de asistencia generados por el usuario",
+    },
   ],
   components: {
     securitySchemes: {
@@ -142,6 +146,54 @@ const definition = {
             type: "string",
             format: "date-time",
             example: "2026-09-15T18:00:00.000Z",
+          },
+        },
+      },
+      Ticket: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          name: { type: "string", example: "Jesus Garcia" },
+          email: {
+            type: "string",
+            format: "email",
+            example: "jesus@tecnm.mx",
+          },
+          github: { type: "string", nullable: true, example: "@jesusgg" },
+          avatar: {
+            type: "string",
+            nullable: true,
+            description: "Data URL o URL publica del avatar",
+            example: "data:image/png;base64,iVBORw0K...",
+          },
+          userId: { type: "integer", example: 1 },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" },
+        },
+      },
+      TicketInput: {
+        type: "object",
+        required: ["name", "email"],
+        properties: {
+          name: {
+            type: "string",
+            minLength: 2,
+            example: "Jesus Garcia",
+          },
+          email: {
+            type: "string",
+            format: "email",
+            example: "jesus@tecnm.mx",
+          },
+          github: {
+            type: "string",
+            nullable: true,
+            example: "@jesusgg",
+          },
+          avatar: {
+            type: "string",
+            nullable: true,
+            description: "Data URL del avatar (opcional)",
           },
         },
       },

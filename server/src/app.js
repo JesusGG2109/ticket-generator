@@ -5,6 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const eventRoutes = require("./routes/event.routes");
 const authRoutes = require("./routes/auth.routes");
+const ticketRoutes = require("./routes/ticket.routes");
 const errorMiddleware = require("./middlewares/error.middleware");
 
 const createApp = () => {
@@ -37,6 +38,7 @@ const createApp = () => {
 
   app.use("/api/events", eventRoutes);
   app.use("/api/auth", authRoutes);
+  app.use("/api/tickets", ticketRoutes);
 
   app.use(
     "/api/docs",
