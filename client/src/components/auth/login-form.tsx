@@ -31,8 +31,7 @@ export const LoginForm = () => {
       navigate("/eventos");
     } catch (error: any) {
       const message =
-        error?.response?.data?.message ||
-        "Error al iniciar sesion";
+        error?.response?.data?.message || "Error al iniciar sesion";
       setServerError(message);
     } finally {
       setSubmitting(false);
@@ -40,40 +39,41 @@ export const LoginForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 max-w-md mx-auto bg-white/10 border border-white/20 rounded-xl p-6"
-    >
-      <div className="flex flex-col gap-1">
-        <label className="text-white text-sm">Correo</label>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+      <div className="flex flex-col gap-2">
+        <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
+          Correo
+        </label>
         <input
           type="email"
+          autoComplete="email"
           {...register("email", { required: "El correo es requerido" })}
-          className="bg-transparent border border-white/30 rounded-lg px-3 py-2 text-white outline-none"
+          className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
           placeholder="correo@ejemplo.com"
         />
         {errors.email && (
-          <span className="text-red-300 text-xs">{errors.email.message}</span>
+          <span className="text-xs text-red-300">{errors.email.message}</span>
         )}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label className="text-white text-sm">Contrasena</label>
+      <div className="flex flex-col gap-2">
+        <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
+          Contrasena
+        </label>
         <input
           type="password"
+          autoComplete="current-password"
           {...register("password", { required: "La contrasena es requerida" })}
-          className="bg-transparent border border-white/30 rounded-lg px-3 py-2 text-white outline-none"
-          placeholder="********"
+          className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
+          placeholder="••••••••"
         />
         {errors.password && (
-          <span className="text-red-300 text-xs">
-            {errors.password.message}
-          </span>
+          <span className="text-xs text-red-300">{errors.password.message}</span>
         )}
       </div>
 
       {serverError && (
-        <div className="bg-red-500/30 border border-red-400 text-red-100 rounded-lg px-3 py-2 text-sm">
+        <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-xs text-red-200 backdrop-blur-sm">
           {serverError}
         </div>
       )}
@@ -81,9 +81,14 @@ export const LoginForm = () => {
       <button
         type="submit"
         disabled={submitting}
-        className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-bold rounded-lg px-4 py-2"
+        className="group relative mt-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#22D3EE] px-4 py-3 text-sm font-semibold text-white shadow-[0_0_24px_-6px_rgba(139,92,246,0.6)] transition-all hover:shadow-[0_0_32px_-4px_rgba(139,92,246,0.8)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {submitting ? "Entrando..." : "Iniciar sesion"}
+        <span className="flex items-center justify-center gap-2">
+          {submitting && (
+            <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+          )}
+          {submitting ? "Verificando acceso..." : "Iniciar sesion"}
+        </span>
       </button>
     </form>
   );
