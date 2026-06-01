@@ -1,30 +1,33 @@
 /**
- * Starfield — Núcleo de energía tecnológica.
+ * Starfield — "El Reactor".
  *
- * 5 capas premium con movimiento orgánico continuo:
- *  1. Base profunda (#0a0b1a) con gradiente vertical sutil.
- *  2. Aurora principal: 3 masas gigantes (violeta, azul eléctrico, indigo)
- *     con overlap parcial para mezcla orgánica de color.
- *  3. Energía secundaria: 2 sparks (cyan, violeta brillante) más rápidos.
- *  4. Campo estelar curado (2 capas, drift muy lento opuesto).
- *  5. Glow atmosférico + vignette.
+ * Concepto: fuente única de energía centrada. Toda la luz emana del mismo
+ * punto y se difunde hacia los bordes con caída radial. El centro coincide
+ * con donde naturalmente va el contenido (50% horiz, ~35% vert) → la luz
+ * dirige la mirada hacia el hero/CTA antes de leer una palabra.
  *
- * Diseño:
- *  - NO usa `mix-blend-mode: screen` (lección del intento anterior — sobre
- *    fondo casi opaco mata la saturación). Solo opacity directa sobre la base.
- *  - Wrapper `isolation: isolate` en MainLayout permite `z-index: -10` sin
- *    quedar atrapado tras el background del #root.
+ * Capas (de fondo a frente):
+ *   1. Base navy con gradiente vertical sutil.
+ *   2. Atmósfera lejana (150vw) — garantiza que el área baja no pierda
+ *      iluminación cuando el usuario hace scroll al formulario.
+ *   3. Aurora exterior (anillo indigo + cyan, gira lentamente).
+ *   4. Halo medio (violeta + azul).
+ *   5. Núcleo (blanco-rosado → violeta cálido, respira).
+ *   6. Banda horizontal de aurora cruzando el reactor (rota antihorario).
+ *   7. Bandas oblicuas ×2 atravesando el reactor (corrientes de energía).
+ *   8. Sparks orbitales ×3 (cyan, violeta brillante, índigo).
+ *   9. Atmósfera frontal de tinte + vignette radial + estrellas curadas.
+ *
+ * Sin `mix-blend-mode`. Solo opacity directa sobre base navy.
  *
  * Performance:
- *  - Solo `transform` y `opacity` animados (GPU compositor).
- *  - Blur estático en elemento visible → cacheado, los wrappers solo
- *    transforman.
- *  - 5 masas + 2 capas de estrellas + 1 glow = 8 elementos animados.
- *  - `will-change: transform` en wrappers.
- *  - `prefers-reduced-motion` pausa todo.
+ *   - Solo transform / opacity / border-radius animados.
+ *   - Blur estático cacheado.
+ *   - will-change: transform en wrappers animados.
+ *   - prefers-reduced-motion pausa todo.
  *
- * Duraciones primas/coprimas (19, 23, 31, 37, 41, 43, 47, 53, 61, 67, 71,
- * 89, 113, 187, 211) → nunca resincronizan visualmente.
+ * Duraciones primas/coprimas (13, 19, 23, 31, 37, 53, 67, 71, 89, 113,
+ * 127, 191, 223) → nunca resincronizan.
  */
 export const Starfield = () => {
   return (
@@ -33,54 +36,70 @@ export const Starfield = () => {
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       style={{
         background:
-          "linear-gradient(180deg, #0d0f24 0%, #0a0b1a 50%, #08091a 100%)",
+          "linear-gradient(180deg, #0c0e22 0%, #0a0d1f 50%, #08091a 100%)",
       }}
     >
-      {/* CAPA 5 — Glow atmosférico de fondo (radial central sutil) */}
-      <div className="atmo-glow" />
+      {/* CAPA 2 — Atmósfera lejana (extiende luz hasta el footer) */}
+      <div className="atmo-far" />
 
-      {/* CAPA 2 — Aurora principal: 3 masas gigantes */}
-
-      {/* Aurora 1 — Violeta profunda */}
-      <div className="mass-translate mass-1-translate">
-        <div className="mass-scale mass-1-scale">
-          <div className="mass mass-1" />
+      {/* CAPA 3 — Aurora exterior (anillo grande, rota horario) */}
+      <div className="reactor-translate">
+        <div className="aurora-outer-spin">
+          <div className="aurora-outer" />
         </div>
       </div>
 
-      {/* Aurora 2 — Azul eléctrico */}
-      <div className="mass-translate mass-2-translate">
-        <div className="mass-scale mass-2-scale">
-          <div className="mass-spin mass-2-spin">
-            <div className="mass mass-2" />
-          </div>
+      {/* CAPA 4 — Halo medio */}
+      <div className="reactor-translate">
+        <div className="halo-mid-scale">
+          <div className="halo-mid" />
         </div>
       </div>
 
-      {/* Aurora 3 — Indigo */}
-      <div className="mass-translate mass-3-translate">
-        <div className="mass-scale mass-3-scale">
-          <div className="mass mass-3" />
+      {/* CAPA 5 — Núcleo (respira) */}
+      <div className="reactor-translate">
+        <div className="core-scale">
+          <div className="core" />
         </div>
       </div>
 
-      {/* CAPA 3 — Energía secundaria */}
-
-      {/* Energy 1 — Cyan (pulso-órbita) */}
-      <div className="mass-translate energy-1-translate">
-        <div className="mass-scale energy-1-scale">
-          <div className="energy energy-1" />
+      {/* CAPA 6 — Banda horizontal cruzando el reactor (rota antihorario) */}
+      <div className="reactor-translate">
+        <div className="band-h-spin">
+          <div className="band-h" />
         </div>
       </div>
 
-      {/* Energy 2 — Violeta brillante (drift + spin) */}
-      <div className="mass-translate energy-2-translate">
-        <div className="mass-spin energy-2-spin">
-          <div className="energy energy-2" />
+      {/* CAPA 7 — Bandas oblicuas */}
+      <div className="reactor-translate">
+        <div className="band-d1-drift">
+          <div className="band-d1" />
+        </div>
+      </div>
+      <div className="reactor-translate">
+        <div className="band-d2-drift">
+          <div className="band-d2" />
         </div>
       </div>
 
-      {/* CAPA 4 — Campo estelar curado */}
+      {/* CAPA 8 — Sparks orbitales (3 radios distintos) */}
+      <div className="reactor-translate">
+        <div className="spark-1-orbit">
+          <div className="spark spark-1" />
+        </div>
+      </div>
+      <div className="reactor-translate">
+        <div className="spark-2-orbit">
+          <div className="spark spark-2" />
+        </div>
+      </div>
+      <div className="reactor-translate">
+        <div className="spark-3-orbit">
+          <div className="spark spark-3" />
+        </div>
+      </div>
+
+      {/* CAPA 9 — Estrellas curadas + atmósfera frontal + vignette */}
       <div className="stars-far-wrap">
         <div className="absolute inset-0 stars-far" />
       </div>
@@ -88,255 +107,275 @@ export const Starfield = () => {
         <div className="absolute inset-0 stars-near" />
       </div>
 
-      {/* CAPA 5 — Vignette */}
+      {/* Atmósfera frontal (pulso de opacidad) */}
+      <div className="atmo-front" />
+
+      {/* Vignette radial — refuerza foco central */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(10,11,26,0.35) 0%, transparent 18%, transparent 82%, rgba(10,11,26,0.6) 100%)",
+            "radial-gradient(ellipse 100% 90% at 50% 38%, transparent 30%, rgba(8,9,26,0.35) 75%, rgba(8,9,26,0.7) 100%)",
         }}
       />
 
       <style>{`
         /* ============================================================
-           GLOW ATMOSFÉRICO — radial central con pulso de opacidad
+           Centro del reactor: 50% horizontal, 35% vertical
+           Todos los elementos del reactor heredan esta translación común.
            ============================================================ */
-        .atmo-glow {
+        .reactor-translate {
           position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(ellipse 90% 70% at 50% 40%, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0.06) 35%, transparent 65%),
-            radial-gradient(ellipse 60% 50% at 20% 80%, rgba(139, 92, 246, 0.10) 0%, transparent 60%);
-          animation: atmo-pulse 23s linear infinite;
-          will-change: opacity;
+          top: 35%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          will-change: transform;
         }
 
-        @keyframes atmo-pulse {
-          0%, 100% { opacity: 0.55; }
-          50%      { opacity: 0.85; }
-        }
-
-        /* ============================================================
-           ESTRUCTURA COMÚN — wrappers vacíos para componer transforms
-           ============================================================ */
-        .mass-translate, .mass-scale, .mass-spin {
+        /* Wrappers vacíos para componer transforms */
+        .aurora-outer-spin,
+        .halo-mid-scale,
+        .core-scale,
+        .band-h-spin,
+        .band-d1-drift,
+        .band-d2-drift,
+        .spark-1-orbit,
+        .spark-2-orbit,
+        .spark-3-orbit {
           position: absolute;
           width: 0;
           height: 0;
           will-change: transform;
         }
 
-        .mass, .energy {
+        .aurora-outer,
+        .halo-mid,
+        .core,
+        .band-h,
+        .band-d1,
+        .band-d2,
+        .spark {
           position: absolute;
           will-change: transform, border-radius;
         }
 
         /* ============================================================
-           AURORA PRINCIPAL — 3 masas gigantes
+           CAPA 2 — ATMÓSFERA LEJANA (cubre todo, extiende a footer)
            ============================================================ */
-
-        /* MASA 1 — VIOLETA PROFUNDA (top-left, drift lateral + morph) */
-        .mass-1-translate {
-          top: 28%;
-          left: 18%;
-          animation: drift-lateral 71s linear infinite;
-        }
-        .mass-1-scale {
-          animation: breathe-iso 47s linear infinite;
-        }
-        .mass-1 {
-          width: 90vw;
-          height: 90vw;
-          max-width: 1100px;
-          max-height: 1100px;
-          margin-left: -45vw;
-          margin-top: -45vw;
-          background: radial-gradient(circle, rgba(139, 92, 246, 0.95) 0%, rgba(124, 58, 237, 0.45) 35%, rgba(124, 58, 237, 0.12) 60%, transparent 75%);
-          filter: blur(120px);
-          opacity: 0.78;
-          border-radius: 60% 40% 35% 65% / 55% 45% 60% 40%;
-          animation: morph-a 53s linear infinite;
+        .atmo-far {
+          position: absolute;
+          left: 50%;
+          top: 45%;
+          width: 150vw;
+          height: 150vw;
+          margin-left: -75vw;
+          margin-top: -75vw;
+          background: radial-gradient(circle, rgba(167, 139, 250, 0.42) 0%, rgba(124, 58, 237, 0.18) 30%, rgba(99, 102, 241, 0.08) 55%, transparent 75%);
+          filter: blur(160px);
         }
 
-        /* MASA 2 — AZUL ELÉCTRICO (bottom-right, diagonal + spin lento) */
-        .mass-2-translate {
-          top: 70%;
-          left: 78%;
-          animation: drift-diag 89s linear infinite;
+        /* ============================================================
+           CAPA 3 — AURORA EXTERIOR (anillo indigo + cyan, rota horario)
+           ============================================================ */
+        .aurora-outer-spin {
+          animation: spin-cw 89s linear infinite;
         }
-        .mass-2-scale {
-          animation: breathe-vertical 37s linear infinite;
-        }
-        .mass-2-spin {
-          animation: spin-cw 113s linear infinite;
-        }
-        .mass-2 {
-          width: 100vw;
-          height: 100vw;
+        .aurora-outer {
+          width: 95vw;
+          height: 95vw;
           max-width: 1300px;
           max-height: 1300px;
-          margin-left: -50vw;
-          margin-top: -50vw;
-          background: radial-gradient(circle, rgba(59, 130, 246, 0.92) 0%, rgba(59, 130, 246, 0.4) 32%, rgba(37, 99, 235, 0.12) 58%, transparent 72%);
-          filter: blur(140px);
-          opacity: 0.70;
-          border-radius: 45% 55% 60% 40% / 50% 60% 40% 50%;
-          animation: morph-b 41s linear infinite;
-        }
-
-        /* MASA 3 — INDIGO (centro-derecha, orbita) */
-        .mass-3-translate {
-          top: 50%;
-          left: 62%;
-          animation: orbit-ellipse 61s linear infinite;
-        }
-        .mass-3-scale {
-          animation: breathe-anisotropic 43s linear infinite;
-        }
-        .mass-3 {
-          width: 80vw;
-          height: 80vw;
-          max-width: 1000px;
-          max-height: 1000px;
-          margin-left: -40vw;
-          margin-top: -40vw;
-          background: radial-gradient(circle, rgba(99, 102, 241, 0.88) 0%, rgba(79, 70, 229, 0.4) 35%, transparent 65%);
+          margin-left: -47.5vw;
+          margin-top: -47.5vw;
+          background:
+            radial-gradient(circle at 30% 50%, rgba(99, 102, 241, 0.75) 0%, transparent 40%),
+            radial-gradient(circle at 70% 50%, rgba(34, 211, 238, 0.60) 0%, transparent 38%),
+            radial-gradient(circle at 50% 20%, rgba(139, 92, 246, 0.55) 0%, transparent 40%);
           filter: blur(110px);
-          opacity: 0.65;
-          border-radius: 50% 50% 35% 65% / 60% 40% 55% 45%;
-          animation: morph-c 67s linear infinite;
+          opacity: 0.62;
+          border-radius: 50%;
         }
 
         /* ============================================================
-           ENERGÍA SECUNDARIA — 2 sparks más rápidos
+           CAPA 4 — HALO MEDIO (violeta + azul)
            ============================================================ */
+        .halo-mid-scale {
+          animation: breathe-anisotropic 31s linear infinite;
+        }
+        .halo-mid {
+          width: 65vw;
+          height: 65vw;
+          max-width: 850px;
+          max-height: 850px;
+          margin-left: -32.5vw;
+          margin-top: -32.5vw;
+          background:
+            radial-gradient(circle at 40% 45%, rgba(139, 92, 246, 0.88) 0%, rgba(124, 58, 237, 0.4) 35%, transparent 65%),
+            radial-gradient(circle at 65% 60%, rgba(59, 130, 246, 0.70) 0%, transparent 45%);
+          filter: blur(90px);
+          opacity: 0.78;
+          border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%;
+          animation: morph-halo 53s linear infinite;
+        }
 
-        /* ENERGY 1 — CYAN (pulso-órbita) */
-        .energy-1-translate {
-          top: 25%;
-          left: 78%;
-          animation: spark-orbit 31s linear infinite;
+        /* ============================================================
+           CAPA 5 — NÚCLEO (blanco-rosa → violeta, respira)
+           ============================================================ */
+        .core-scale {
+          animation: core-breathe 13s linear infinite;
         }
-        .energy-1-scale {
-          animation: pulse-strong 19s linear infinite;
+        .core {
+          width: 30vw;
+          height: 30vw;
+          max-width: 400px;
+          max-height: 400px;
+          margin-left: -15vw;
+          margin-top: -15vw;
+          background: radial-gradient(circle, rgba(220, 210, 255, 0.92) 0%, rgba(196, 181, 253, 0.75) 18%, rgba(167, 139, 250, 0.55) 38%, rgba(139, 92, 246, 0.25) 60%, transparent 80%);
+          filter: blur(50px);
+          opacity: 0.95;
+          border-radius: 50%;
         }
-        .energy-1 {
-          width: 40vw;
-          height: 40vw;
-          max-width: 500px;
-          max-height: 500px;
-          margin-left: -20vw;
-          margin-top: -20vw;
-          background: radial-gradient(circle, rgba(34, 211, 238, 0.85) 0%, rgba(34, 211, 238, 0.35) 35%, transparent 65%);
-          filter: blur(80px);
+
+        /* ============================================================
+           CAPA 6 — BANDA HORIZONTAL (cruza el reactor, rota antihorario)
+           ============================================================ */
+        .band-h-spin {
+          animation: spin-ccw 71s linear infinite;
+        }
+        .band-h {
+          width: 120vw;
+          height: 25vh;
+          max-width: 1600px;
+          margin-left: -60vw;
+          margin-top: -12.5vh;
+          background: linear-gradient(90deg, transparent 0%, rgba(96, 165, 250, 0.4) 25%, rgba(34, 211, 238, 0.55) 50%, rgba(99, 102, 241, 0.4) 75%, transparent 100%);
+          filter: blur(60px);
           opacity: 0.55;
-          border-radius: 70% 30% 50% 50% / 40% 65% 35% 60%;
-          animation: morph-d 37s linear infinite;
-        }
-
-        /* ENERGY 2 — VIOLETA BRILLANTE (drift + spin) */
-        .energy-2-translate {
-          top: 78%;
-          left: 22%;
-          animation: spark-drift 19s linear infinite;
-        }
-        .energy-2-spin {
-          animation: spin-ccw 67s linear infinite;
-        }
-        .energy-2 {
-          width: 35vw;
-          height: 35vw;
-          max-width: 450px;
-          max-height: 450px;
-          margin-left: -17.5vw;
-          margin-top: -17.5vw;
-          background: radial-gradient(circle, rgba(168, 85, 247, 0.82) 0%, rgba(168, 85, 247, 0.3) 38%, transparent 65%);
-          filter: blur(70px);
-          opacity: 0.50;
+          border-radius: 50%;
         }
 
         /* ============================================================
-           KEYFRAMES — TRASLACIONES
+           CAPA 7 — BANDAS OBLICUAS (corrientes de energía)
            ============================================================ */
-
-        @keyframes drift-lateral {
-          0%   { transform: translate3d(0, 0, 0); }
-          25%  { transform: translate3d(15vw, 3vh, 0); }
-          50%  { transform: translate3d(30vw, 0, 0); }
-          75%  { transform: translate3d(15vw, -3vh, 0); }
-          100% { transform: translate3d(0, 0, 0); }
+        .band-d1-drift {
+          animation: band-drift-1 113s linear infinite;
+        }
+        .band-d1 {
+          width: 80vw;
+          height: 12vh;
+          max-width: 1100px;
+          margin-left: -40vw;
+          margin-top: -6vh;
+          background: linear-gradient(90deg, transparent 0%, rgba(34, 211, 238, 0.55) 50%, transparent 100%);
+          filter: blur(40px);
+          opacity: 0.45;
+          transform: rotate(-15deg);
+          border-radius: 50%;
         }
 
-        @keyframes drift-diag {
-          0%   { transform: translate3d(0, 0, 0); }
-          25%  { transform: translate3d(-12vw, -8vh, 0); }
-          50%  { transform: translate3d(-22vw, -18vh, 0); }
-          75%  { transform: translate3d(-10vw, -8vh, 0); }
-          100% { transform: translate3d(0, 0, 0); }
+        .band-d2-drift {
+          animation: band-drift-2 127s linear infinite;
         }
-
-        @keyframes orbit-ellipse {
-          0%   { transform: translate3d(0, 0, 0); }
-          25%  { transform: translate3d(8vw, -10vh, 0); }
-          50%  { transform: translate3d(0, -18vh, 0); }
-          75%  { transform: translate3d(-8vw, -10vh, 0); }
-          100% { transform: translate3d(0, 0, 0); }
-        }
-
-        @keyframes spark-orbit {
-          0%   { transform: translate3d(0, 0, 0); }
-          25%  { transform: translate3d(-10vw, 8vh, 0); }
-          50%  { transform: translate3d(-18vw, 0, 0); }
-          75%  { transform: translate3d(-10vw, -8vh, 0); }
-          100% { transform: translate3d(0, 0, 0); }
-        }
-
-        @keyframes spark-drift {
-          0%   { transform: translate3d(0, 0, 0); }
-          33%  { transform: translate3d(12vw, -6vh, 0); }
-          66%  { transform: translate3d(6vw, 10vh, 0); }
-          100% { transform: translate3d(0, 0, 0); }
+        .band-d2 {
+          width: 90vw;
+          height: 10vh;
+          max-width: 1200px;
+          margin-left: -45vw;
+          margin-top: -5vh;
+          background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.50) 50%, transparent 100%);
+          filter: blur(35px);
+          opacity: 0.40;
+          transform: rotate(18deg);
+          border-radius: 50%;
         }
 
         /* ============================================================
-           KEYFRAMES — ESCALAS Y RESPIRACIÓN
+           CAPA 8 — SPARKS ORBITALES (3 radios distintos)
            ============================================================ */
 
-        @keyframes breathe-iso {
-          0%   { transform: scale(1); }
-          25%  { transform: scale(1.08); }
-          50%  { transform: scale(1.14); }
-          75%  { transform: scale(1.05); }
-          100% { transform: scale(1); }
+        .spark { border-radius: 50%; }
+
+        /* Spark 1 — Cyan, radio cercano, horario */
+        .spark-1-orbit {
+          animation: orbit-1 23s linear infinite;
+        }
+        .spark-1 {
+          width: 10vw;
+          height: 10vw;
+          max-width: 140px;
+          max-height: 140px;
+          margin-left: -5vw;
+          margin-top: -5vw;
+          background: radial-gradient(circle, rgba(34, 211, 238, 0.85) 0%, transparent 65%);
+          filter: blur(28px);
+          opacity: 0.65;
         }
 
-        @keyframes breathe-vertical {
-          0%   { transform: scale(1, 1); }
-          25%  { transform: scale(0.94, 1.10); }
-          50%  { transform: scale(1.08, 0.92); }
-          75%  { transform: scale(0.96, 1.08); }
-          100% { transform: scale(1, 1); }
+        /* Spark 2 — Violeta brillante, radio medio, horario */
+        .spark-2-orbit {
+          animation: orbit-2 37s linear infinite;
+        }
+        .spark-2 {
+          width: 12vw;
+          height: 12vw;
+          max-width: 170px;
+          max-height: 170px;
+          margin-left: -6vw;
+          margin-top: -6vw;
+          background: radial-gradient(circle, rgba(168, 85, 247, 0.80) 0%, transparent 65%);
+          filter: blur(32px);
+          opacity: 0.60;
+        }
+
+        /* Spark 3 — Indigo, radio lejos, antihorario */
+        .spark-3-orbit {
+          animation: orbit-3 53s linear infinite;
+        }
+        .spark-3 {
+          width: 8vw;
+          height: 8vw;
+          max-width: 110px;
+          max-height: 110px;
+          margin-left: -4vw;
+          margin-top: -4vw;
+          background: radial-gradient(circle, rgba(99, 102, 241, 0.75) 0%, transparent 65%);
+          filter: blur(24px);
+          opacity: 0.55;
+        }
+
+        /* ============================================================
+           ATMÓSFERA FRONTAL (pulso de opacidad sutil)
+           ============================================================ */
+        .atmo-front {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse 80% 60% at 50% 35%, rgba(139, 92, 246, 0.10) 0%, transparent 70%);
+          animation: atmo-front-pulse 19s linear infinite;
+          will-change: opacity;
+        }
+
+        @keyframes atmo-front-pulse {
+          0%, 100% { opacity: 0.6; }
+          50%      { opacity: 1; }
+        }
+
+        /* ============================================================
+           KEYFRAMES — BREATHING / ROTATIONS / ORBITS / DRIFTS
+           ============================================================ */
+
+        @keyframes core-breathe {
+          0%, 100% { transform: scale(1); }
+          50%      { transform: scale(1.06); }
         }
 
         @keyframes breathe-anisotropic {
           0%   { transform: scale(1, 1); }
-          33%  { transform: scale(1.08, 0.93); }
-          66%  { transform: scale(0.93, 1.08); }
+          33%  { transform: scale(1.08, 0.94); }
+          66%  { transform: scale(0.94, 1.08); }
           100% { transform: scale(1, 1); }
         }
-
-        @keyframes pulse-strong {
-          0%   { transform: scale(1); }
-          20%  { transform: scale(1.18); }
-          40%  { transform: scale(0.92); }
-          60%  { transform: scale(1.20); }
-          80%  { transform: scale(0.96); }
-          100% { transform: scale(1); }
-        }
-
-        /* ============================================================
-           KEYFRAMES — ROTACIONES
-           ============================================================ */
 
         @keyframes spin-cw {
           0%   { transform: rotate(0deg); }
@@ -348,91 +387,97 @@ export const Starfield = () => {
           100% { transform: rotate(-360deg); }
         }
 
+        @keyframes morph-halo {
+          0%, 100% { border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%; }
+          25%      { border-radius: 40% 60% 55% 45% / 60% 40% 55% 45%; }
+          50%      { border-radius: 50% 50% 40% 60% / 45% 55% 50% 50%; }
+          75%      { border-radius: 60% 40% 50% 50% / 55% 45% 60% 40%; }
+        }
+
+        /*
+         * Órbitas: el elemento orbita alrededor de (0,0) a un radio dado.
+         * Combinación de rotate inversa + translate + rotate compensatoria
+         * mantiene el spark "mirando hacia adelante".
+         */
+        @keyframes orbit-1 {
+          0%   { transform: rotate(0deg)   translate(18vw, 0) rotate(0deg); }
+          100% { transform: rotate(360deg) translate(18vw, 0) rotate(-360deg); }
+        }
+        @keyframes orbit-2 {
+          0%   { transform: rotate(0deg)   translate(28vw, 0) rotate(0deg); }
+          100% { transform: rotate(360deg) translate(28vw, 0) rotate(-360deg); }
+        }
+        @keyframes orbit-3 {
+          0%   { transform: rotate(0deg)   translate(38vw, 0) rotate(0deg); }
+          100% { transform: rotate(-360deg) translate(38vw, 0) rotate(360deg); }
+        }
+
+        @keyframes band-drift-1 {
+          0%   { transform: translate3d(-12vw, 0, 0); }
+          50%  { transform: translate3d(12vw, 0, 0); }
+          100% { transform: translate3d(-12vw, 0, 0); }
+        }
+
+        @keyframes band-drift-2 {
+          0%   { transform: translate3d(10vw, 0, 0); }
+          50%  { transform: translate3d(-10vw, 0, 0); }
+          100% { transform: translate3d(10vw, 0, 0); }
+        }
+
         /* ============================================================
-           KEYFRAMES — MORPH (siluetas líquidas)
-           ============================================================ */
-
-        @keyframes morph-a {
-          0%, 100% { border-radius: 60% 40% 35% 65% / 55% 45% 60% 40%; }
-          25%      { border-radius: 35% 65% 70% 30% / 40% 60% 50% 50%; }
-          50%      { border-radius: 50% 50% 30% 70% / 65% 35% 45% 55%; }
-          75%      { border-radius: 70% 30% 55% 45% / 35% 65% 60% 40%; }
-        }
-
-        @keyframes morph-b {
-          0%, 100% { border-radius: 45% 55% 60% 40% / 50% 60% 40% 50%; }
-          33%      { border-radius: 65% 35% 40% 60% / 35% 50% 55% 65%; }
-          66%      { border-radius: 30% 70% 55% 45% / 60% 40% 50% 50%; }
-        }
-
-        @keyframes morph-c {
-          0%, 100% { border-radius: 50% 50% 35% 65% / 60% 40% 55% 45%; }
-          25%      { border-radius: 65% 35% 55% 45% / 35% 65% 40% 60%; }
-          50%      { border-radius: 30% 70% 45% 55% / 55% 45% 60% 40%; }
-          75%      { border-radius: 60% 40% 65% 35% / 45% 55% 35% 65%; }
-        }
-
-        @keyframes morph-d {
-          0%, 100% { border-radius: 70% 30% 50% 50% / 40% 65% 35% 60%; }
-          50%      { border-radius: 40% 60% 35% 65% / 55% 45% 65% 35%; }
-        }
-
-        /* ============================================================
-           CAMPO ESTELAR — 2 capas con drift muy lento opuesto
+           ESTRELLAS — drift muy lento direcciones opuestas
            ============================================================ */
 
         .stars-far-wrap {
           position: absolute;
           inset: -10%;
           opacity: 0.55;
-          animation: stars-drift-far 187s linear infinite;
+          animation: stars-drift-far 191s linear infinite;
           will-change: transform;
         }
         .stars-near-wrap {
           position: absolute;
           inset: -10%;
           opacity: 0.75;
-          animation: stars-drift-near 211s linear infinite;
+          animation: stars-drift-near 223s linear infinite;
           will-change: transform;
         }
 
         @keyframes stars-drift-far {
           0%   { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(-2.5%, 3.5%, 0); }
+          100% { transform: translate3d(-2%, 3%, 0); }
         }
 
         @keyframes stars-drift-near {
           0%   { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(3.5%, -2.5%, 0); }
+          100% { transform: translate3d(3%, -2%, 0); }
         }
 
         .stars-far {
           background-image:
-            radial-gradient(1px 1px at 9% 14%, rgba(255,255,255,0.7), transparent 50%),
-            radial-gradient(1px 1px at 21% 38%, rgba(255,255,255,0.5), transparent 50%),
-            radial-gradient(1px 1px at 31% 7%,  rgba(255,255,255,0.6), transparent 50%),
-            radial-gradient(1px 1px at 44% 68%, rgba(255,255,255,0.45), transparent 50%),
-            radial-gradient(1px 1px at 53% 28%, rgba(255,255,255,0.7), transparent 50%),
-            radial-gradient(1px 1px at 64% 84%, rgba(255,255,255,0.55), transparent 50%),
-            radial-gradient(1px 1px at 71% 19%, rgba(255,255,255,0.5), transparent 50%),
-            radial-gradient(1px 1px at 79% 61%, rgba(255,255,255,0.65), transparent 50%),
-            radial-gradient(1px 1px at 87% 12%, rgba(255,255,255,0.4),  transparent 50%),
-            radial-gradient(1px 1px at 93% 49%, rgba(255,255,255,0.55), transparent 50%),
-            radial-gradient(1px 1px at 6%  79%, rgba(255,255,255,0.55), transparent 50%),
-            radial-gradient(1px 1px at 16% 92%, rgba(255,255,255,0.45), transparent 50%),
-            radial-gradient(1px 1px at 48% 46%, rgba(255,255,255,0.6),  transparent 50%);
+            radial-gradient(1px 1px at 11% 16%, rgba(255,255,255,0.7), transparent 50%),
+            radial-gradient(1px 1px at 23% 41%, rgba(255,255,255,0.5), transparent 50%),
+            radial-gradient(1px 1px at 32% 8%,  rgba(255,255,255,0.6), transparent 50%),
+            radial-gradient(1px 1px at 44% 72%, rgba(255,255,255,0.45), transparent 50%),
+            radial-gradient(1px 1px at 54% 28%, rgba(255,255,255,0.7), transparent 50%),
+            radial-gradient(1px 1px at 65% 86%, rgba(255,255,255,0.55), transparent 50%),
+            radial-gradient(1px 1px at 73% 20%, rgba(255,255,255,0.5), transparent 50%),
+            radial-gradient(1px 1px at 80% 63%, rgba(255,255,255,0.65), transparent 50%),
+            radial-gradient(1px 1px at 88% 13%, rgba(255,255,255,0.4),  transparent 50%),
+            radial-gradient(1px 1px at 93% 51%, rgba(255,255,255,0.55), transparent 50%),
+            radial-gradient(1px 1px at 7%  82%, rgba(255,255,255,0.55), transparent 50%);
           background-size: 100% 100%;
         }
 
         .stars-near {
           background-image:
-            radial-gradient(1.5px 1.5px at 17% 26%, rgba(255,255,255,0.95), transparent 60%),
-            radial-gradient(1.5px 1.5px at 37% 59%, rgba(255,255,255,0.85), transparent 60%),
-            radial-gradient(1.5px 1.5px at 59% 13%, rgba(255,255,255,0.9),  transparent 60%),
-            radial-gradient(2px 2px   at 73% 76%, rgba(200,220,255,0.95),   transparent 60%),
-            radial-gradient(2px 2px   at 86% 35%, rgba(220,210,255,0.9),    transparent 60%),
-            radial-gradient(2px 2px   at 26% 84%, rgba(255,255,255,0.95),   transparent 60%),
-            radial-gradient(1.5px 1.5px at 51% 21%, rgba(200,220,255,0.85), transparent 60%);
+            radial-gradient(1.5px 1.5px at 18% 27%, rgba(255,255,255,0.95), transparent 60%),
+            radial-gradient(1.5px 1.5px at 38% 61%, rgba(255,255,255,0.85), transparent 60%),
+            radial-gradient(1.5px 1.5px at 60% 14%, rgba(255,255,255,0.9),  transparent 60%),
+            radial-gradient(2px 2px   at 74% 78%, rgba(200,220,255,0.95),   transparent 60%),
+            radial-gradient(2px 2px   at 87% 36%, rgba(220,210,255,0.9),    transparent 60%),
+            radial-gradient(2px 2px   at 27% 86%, rgba(255,255,255,0.95),   transparent 60%),
+            radial-gradient(1.5px 1.5px at 52% 22%, rgba(200,220,255,0.85), transparent 60%);
           background-size: 100% 100%;
         }
 
@@ -440,12 +485,18 @@ export const Starfield = () => {
            ACCESIBILIDAD
            ============================================================ */
         @media (prefers-reduced-motion: reduce) {
-          .mass-translate,
-          .mass-scale,
-          .mass-spin,
-          .mass,
-          .energy,
-          .atmo-glow,
+          .reactor-translate,
+          .aurora-outer-spin,
+          .halo-mid-scale,
+          .core-scale,
+          .band-h-spin,
+          .band-d1-drift,
+          .band-d2-drift,
+          .spark-1-orbit,
+          .spark-2-orbit,
+          .spark-3-orbit,
+          .halo-mid,
+          .atmo-front,
           .stars-far-wrap,
           .stars-near-wrap {
             animation: none !important;
