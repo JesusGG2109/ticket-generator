@@ -6,14 +6,22 @@ export const RegisterPage = () => {
     <section className="flex min-h-[calc(100vh-80px)] items-center justify-center py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-3 py-1 backdrop-blur-xl">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#8B5CF6] shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
-            <span className="text-[10px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase">
+          <div
+            className="mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1"
+            style={{
+              background: "rgba(255,255,255,0.6)",
+              borderColor: "rgba(15,23,42,0.06)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+            }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#FF4FD8] shadow-[0_0_8px_rgba(255,79,216,0.8)]" />
+            <span className="text-[10px] font-medium tracking-[0.25em] text-[#475569] uppercase">
               Nueva cuenta
             </span>
           </div>
-          <h1 className="text-3xl font-bold text-white">Crea tu cuenta</h1>
-          <p className="mt-2 text-sm text-[#94A3B8]">
+          <h1 className="text-3xl font-bold text-[#0F172A]">Crea tu cuenta</h1>
+          <p className="mt-2 text-sm text-[#475569]">
             Empieza a generar tickets y a gestionar eventos en segundos.
           </p>
         </div>
@@ -21,18 +29,28 @@ export const RegisterPage = () => {
         <div className="relative">
           <div
             aria-hidden="true"
-            className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 via-transparent to-[#22D3EE]/15 blur-lg"
+            className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#FF7A00]/15 via-transparent to-[#FF4FD8]/15 blur-lg"
           />
-          <div className="relative rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl sm:p-8">
+          <div
+            className="relative rounded-2xl border p-6 sm:p-8"
+            style={{
+              background: "rgba(255,255,255,0.65)",
+              borderColor: "rgba(15,23,42,0.06)",
+              backdropFilter: "blur(20px) saturate(140%)",
+              WebkitBackdropFilter: "blur(20px) saturate(140%)",
+              boxShadow:
+                "0 20px 50px -20px rgba(15,23,42,0.18), 0 1px 0 0 rgba(255,255,255,0.9) inset",
+            }}
+          >
             <RegisterForm />
           </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-[#94A3B8]">
+        <p className="mt-6 text-center text-sm text-[#64748B]">
           ¿Ya tienes cuenta?{" "}
           <Link
             to="/login"
-            className="font-medium text-[#22D3EE] transition-colors hover:text-[#60A5FA]"
+            className="font-medium text-[#FF4FD8] transition-colors hover:text-[#FF7A00]"
           >
             Inicia sesion
           </Link>

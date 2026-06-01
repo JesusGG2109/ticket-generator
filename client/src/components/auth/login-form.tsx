@@ -9,6 +9,12 @@ interface LoginInputs {
   password: string;
 }
 
+const inputClass =
+  "rounded-xl border border-[rgba(15,23,42,0.08)] bg-white/70 px-4 py-3 text-sm text-[#0F172A] placeholder-[#94A3B8] outline-none transition-all focus:border-[#FF7A00]/50 focus:bg-white/90 focus:ring-2 focus:ring-[#FF7A00]/15";
+
+const labelClass =
+  "text-[11px] font-semibold tracking-[0.2em] text-[#64748B] uppercase";
+
 export const LoginForm = () => {
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -41,39 +47,35 @@ export const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
-          Correo
-        </label>
+        <label className={labelClass}>Correo</label>
         <input
           type="email"
           autoComplete="email"
           {...register("email", { required: "El correo es requerido" })}
-          className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
+          className={inputClass}
           placeholder="correo@ejemplo.com"
         />
         {errors.email && (
-          <span className="text-xs text-red-300">{errors.email.message}</span>
+          <span className="text-xs text-rose-500">{errors.email.message}</span>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
-          Contrasena
-        </label>
+        <label className={labelClass}>Contrasena</label>
         <input
           type="password"
           autoComplete="current-password"
           {...register("password", { required: "La contrasena es requerida" })}
-          className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
+          className={inputClass}
           placeholder="••••••••"
         />
         {errors.password && (
-          <span className="text-xs text-red-300">{errors.password.message}</span>
+          <span className="text-xs text-rose-500">{errors.password.message}</span>
         )}
       </div>
 
       {serverError && (
-        <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-xs text-red-200 backdrop-blur-sm">
+        <div className="rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-3 text-xs text-rose-700 backdrop-blur-sm">
           {serverError}
         </div>
       )}
@@ -81,7 +83,7 @@ export const LoginForm = () => {
       <button
         type="submit"
         disabled={submitting}
-        className="group relative mt-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_36px_-8px_rgba(139,92,246,0.6),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:shadow-[0_14px_44px_-6px_rgba(139,92,246,0.8),0_1px_0_0_rgba(255,255,255,0.22)_inset] disabled:cursor-not-allowed disabled:opacity-60"
+        className="group relative mt-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#FF7A00] to-[#FF4FD8] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_36px_-8px_rgba(255,122,0,0.55),0_1px_0_0_rgba(255,255,255,0.32)_inset] transition-all hover:shadow-[0_14px_44px_-6px_rgba(255,122,0,0.75),0_1px_0_0_rgba(255,255,255,0.4)_inset] disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span className="flex items-center justify-center gap-2">
           {submitting && (

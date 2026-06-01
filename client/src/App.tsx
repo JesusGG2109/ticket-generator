@@ -14,13 +14,13 @@ import { useAuthStore } from './store/auth'
 const Brand = () => (
   <NavLink to='/' className='group flex items-center gap-2.5'>
     <span className='relative inline-flex h-2.5 w-2.5'>
-      <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8B5CF6] opacity-40' />
-      <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[#8B5CF6] to-[#22D3EE]' />
+      <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF7A00] opacity-40' />
+      <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[#FF7A00] to-[#FF4FD8]' />
     </span>
-    <span className='text-sm font-semibold tracking-[0.18em] text-white uppercase'>
+    <span className='text-sm font-semibold tracking-[0.18em] text-[#0F172A] uppercase'>
       EventHub
     </span>
-    <span className='hidden text-[10px] font-medium tracking-[0.3em] text-[#94A3B8] uppercase sm:inline'>
+    <span className='hidden text-[10px] font-medium tracking-[0.3em] text-[#64748B] uppercase sm:inline'>
       TECNM
     </span>
   </NavLink>
@@ -29,7 +29,7 @@ const Brand = () => (
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   [
     'relative px-3 py-1.5 text-sm font-medium transition-colors',
-    isActive ? 'text-white' : 'text-[#94A3B8] hover:text-white',
+    isActive ? 'text-[#0F172A]' : 'text-[#64748B] hover:text-[#0F172A]',
   ].join(' ')
 
 const NavItem = ({
@@ -47,8 +47,8 @@ const NavItem = ({
           className={[
             'absolute -bottom-1 left-1/2 h-[2px] -translate-x-1/2 rounded-full transition-all duration-200',
             isActive
-              ? 'w-6 bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] opacity-100'
-              : 'w-0 bg-white opacity-0',
+              ? 'w-6 bg-gradient-to-r from-[#FF7A00] to-[#FF4FD8] opacity-100'
+              : 'w-0 bg-[#0F172A] opacity-0',
           ].join(' ')}
         />
       </>
@@ -63,12 +63,12 @@ const Navbar = () => {
 
   return (
     <header
-      className='sticky top-0 z-50 border-b shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset]'
+      className='sticky top-0 z-50 border-b shadow-[0_1px_0_0_rgba(255,255,255,0.9)_inset,0_1px_24px_-12px_rgba(15,23,42,0.12)]'
       style={{
-        background: 'rgba(8,12,24,0.45)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderColor: 'rgba(255,255,255,0.08)',
+        background: 'rgba(255,255,255,0.55)',
+        backdropFilter: 'blur(20px) saturate(140%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(140%)',
+        borderColor: 'rgba(15,23,42,0.06)',
       }}
     >
       <div className='mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6'>
@@ -83,18 +83,18 @@ const Navbar = () => {
         <div className='flex items-center gap-2'>
           {isAuthenticated ? (
             <>
-              <div className='hidden items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 sm:flex'>
+              <div className='hidden items-center gap-2 rounded-full border border-[rgba(15,23,42,0.06)] bg-white/60 px-3 py-1.5 sm:flex'>
                 <span className='relative inline-flex h-1.5 w-1.5'>
-                  <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60' />
-                  <span className='relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400' />
+                  <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60' />
+                  <span className='relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500' />
                 </span>
-                <span className='text-xs font-medium text-[#D1D5DB]'>
+                <span className='text-xs font-medium text-[#0F172A]'>
                   {user?.name}
                 </span>
               </div>
               <button
                 onClick={() => clearAuth()}
-                className='rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-[#D1D5DB] transition-colors hover:border-white/20 hover:bg-white/[0.06] hover:text-white'
+                className='rounded-full border border-[rgba(15,23,42,0.06)] bg-white/60 px-3 py-1.5 text-xs font-medium text-[#475569] transition-colors hover:border-[rgba(15,23,42,0.12)] hover:bg-white/80 hover:text-[#0F172A]'
               >
                 Cerrar sesion
               </button>
@@ -103,13 +103,13 @@ const Navbar = () => {
             <>
               <NavLink
                 to='/login'
-                className='rounded-full px-3 py-1.5 text-xs font-medium text-[#D1D5DB] transition-colors hover:text-white sm:px-4'
+                className='rounded-full px-3 py-1.5 text-xs font-medium text-[#475569] transition-colors hover:text-[#0F172A] sm:px-4'
               >
                 Iniciar sesion
               </NavLink>
               <NavLink
                 to='/register'
-                className='rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-3 py-1.5 text-xs font-semibold text-white shadow-[0_6px_20px_-6px_rgba(139,92,246,0.55),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:shadow-[0_10px_28px_-4px_rgba(139,92,246,0.75),0_1px_0_0_rgba(255,255,255,0.22)_inset] sm:px-4'
+                className='rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF4FD8] px-3 py-1.5 text-xs font-semibold text-white shadow-[0_6px_20px_-6px_rgba(255,122,0,0.55),0_1px_0_0_rgba(255,255,255,0.32)_inset] transition-all hover:shadow-[0_10px_28px_-4px_rgba(255,122,0,0.75),0_1px_0_0_rgba(255,255,255,0.4)_inset] sm:px-4'
               >
                 Registrarse
               </NavLink>
