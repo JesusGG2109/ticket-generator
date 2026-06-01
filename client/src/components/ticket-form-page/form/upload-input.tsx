@@ -8,12 +8,12 @@ interface Props {
 export const UploadInput = ({ onChange, url = '' }: Props) => {
   return (
     <div className='mb-6 flex flex-col gap-2'>
-      <p className='text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase'>
+      <p className='text-[11px] font-semibold tracking-[0.2em] text-[#64748B] uppercase'>
         Avatar
       </p>
 
-      <label className='group relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border border-dashed border-white/[0.14] bg-white/[0.02] px-4 py-6 transition-all hover:border-[#8B5CF6]/40 hover:bg-white/[0.04]'>
-        <div className='relative grid h-14 w-14 place-content-center overflow-hidden rounded-xl border border-white/[0.08] bg-gradient-to-br from-[#0B1026] to-[#121A3A]'>
+      <label className='group relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border border-dashed border-[rgba(15,23,42,0.14)] bg-white/40 px-4 py-6 transition-all hover:border-[#FF7A00]/40 hover:bg-white/60'>
+        <div className='relative grid h-14 w-14 place-content-center overflow-hidden rounded-xl border border-[rgba(15,23,42,0.08)] bg-gradient-to-br from-[#FFF5EC] to-[#FFEEDF]'>
           {url ? (
             <img
               src={url}
@@ -22,7 +22,7 @@ export const UploadInput = ({ onChange, url = '' }: Props) => {
             />
           ) : (
             <svg
-              className='h-6 w-6 text-[#8B5CF6]'
+              className='h-6 w-6 text-[#FF7A00]'
               viewBox='0 0 24 24'
               fill='none'
               stroke='currentColor'
@@ -39,12 +39,12 @@ export const UploadInput = ({ onChange, url = '' }: Props) => {
 
         <input className='hidden' type='file' accept='image/*' onChange={onChange} />
 
-        <span className='text-center text-xs text-[#94A3B8]'>
+        <span className='text-center text-xs text-[#64748B]'>
           {url ? 'Imagen cargada — click para reemplazar' : 'Arrastra o haz click para subir'}
         </span>
       </label>
 
-      <p className='flex items-center gap-1.5 text-[11px] text-[#94A3B8]/80'>
+      <p className='flex items-center gap-1.5 text-[11px] text-[#94A3B8]'>
         <svg className='h-3 w-3' viewBox='0 0 16 16' fill='none' stroke='currentColor' strokeWidth='1.5'>
           <circle cx='8' cy='8' r='6' />
           <path d='M8 11V8M8 5.5V5.4' strokeLinecap='round' />

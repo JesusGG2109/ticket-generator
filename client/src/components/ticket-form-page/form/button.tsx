@@ -7,7 +7,7 @@ export const Button = ({ submitting = false }: Props) => {
     <button
       type='submit'
       disabled={submitting}
-      className='group relative mt-2 w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-4 py-3.5 text-sm font-semibold text-white shadow-[0_10px_36px_-8px_rgba(139,92,246,0.6),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:shadow-[0_14px_44px_-6px_rgba(139,92,246,0.8),0_1px_0_0_rgba(255,255,255,0.22)_inset] disabled:cursor-not-allowed disabled:opacity-60'
+      className='group relative mt-2 w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#FF7A00] to-[#FF4FD8] px-4 py-3.5 text-sm font-semibold text-white shadow-[0_10px_36px_-8px_rgba(255,122,0,0.55),0_1px_0_0_rgba(255,255,255,0.32)_inset] transition-all hover:shadow-[0_14px_44px_-6px_rgba(255,122,0,0.75),0_1px_0_0_rgba(255,255,255,0.4)_inset] disabled:cursor-not-allowed disabled:opacity-60'
     >
       <span className='flex items-center justify-center gap-2'>
         {submitting && (

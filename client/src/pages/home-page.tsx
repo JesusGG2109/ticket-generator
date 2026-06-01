@@ -20,11 +20,11 @@ export const HomePage = () => {
 
       <div id='generate-ticket' className='mx-auto mt-4 max-w-xl scroll-mt-24'>
         <div className='mb-10 flex items-center gap-4'>
-          <div className='h-px flex-1 bg-gradient-to-r from-transparent via-white/15 to-transparent' />
-          <span className='text-[11px] font-medium tracking-[0.25em] uppercase' style={{ color: 'rgba(255,255,255,0.58)' }}>
+          <div className='h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(15,23,42,0.15)] to-transparent' />
+          <span className='text-[11px] font-medium tracking-[0.25em] uppercase text-[#64748B]'>
             Genera tu ticket
           </span>
-          <div className='h-px flex-1 bg-gradient-to-r from-transparent via-white/15 to-transparent' />
+          <div className='h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(15,23,42,0.15)] to-transparent' />
         </div>
 
         <Form />

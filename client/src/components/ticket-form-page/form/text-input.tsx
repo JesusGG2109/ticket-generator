@@ -19,7 +19,7 @@ export const TextInput = ({
   return (
     <div className='flex flex-col gap-2'>
       <label
-        className='text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase'
+        className='text-[11px] font-semibold tracking-[0.2em] text-[#64748B] uppercase'
         htmlFor={label}
       >
         {label}
@@ -29,10 +29,10 @@ export const TextInput = ({
         id={label}
         type={type}
         placeholder={placeholder}
-        className='rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20'
+        className='rounded-xl border border-[rgba(15,23,42,0.08)] bg-white/70 px-4 py-3 text-sm text-[#0F172A] placeholder-[#94A3B8] outline-none transition-all focus:border-[#FF7A00]/50 focus:bg-white/90 focus:ring-2 focus:ring-[#FF7A00]/15'
       />
       {isError && (
-        <p className='flex items-center gap-1.5 text-xs text-red-300'>
+        <p className='flex items-center gap-1.5 text-xs text-rose-500'>
           <IconInfo />
           {errorMessage}
         </p>

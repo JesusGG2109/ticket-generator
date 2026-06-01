@@ -9,6 +9,12 @@ interface Props {
 
 type Inputs = EventInput;
 
+const INPUT =
+  "rounded-xl border border-[rgba(15,23,42,0.08)] bg-white/70 px-4 py-2.5 text-sm text-[#0F172A] placeholder-[#94A3B8] outline-none transition-all focus:border-[#FF7A00]/50 focus:bg-white/90 focus:ring-2 focus:ring-[#FF7A00]/15";
+
+const LABEL =
+  "text-[11px] font-semibold tracking-[0.2em] text-[#64748B] uppercase";
+
 export const EventForm = ({ onCreated, onCancel }: Props) => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -45,28 +51,28 @@ export const EventForm = ({ onCreated, onCancel }: Props) => {
     <div className="relative mb-8">
       <div
         aria-hidden="true"
-        className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 via-transparent to-[#22D3EE]/15 blur-lg"
+        className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#FF7A00]/15 via-transparent to-[#FF4FD8]/15 blur-lg"
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl sm:p-7"
+        className="relative rounded-2xl border border-[rgba(15,23,42,0.06)] bg-white/65 p-6 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.18),0_1px_0_0_rgba(255,255,255,0.9)_inset] backdrop-blur-xl sm:p-7"
       >
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <div className="mb-1 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-0.5">
-              <span className="h-1 w-1 rounded-full bg-[#22D3EE] shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
-              <span className="text-[9px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase">
+            <div className="mb-1 inline-flex items-center gap-2 rounded-full border border-[rgba(15,23,42,0.06)] bg-white/60 px-2.5 py-0.5">
+              <span className="h-1 w-1 rounded-full bg-[#FF7A00] shadow-[0_0_6px_rgba(255,122,0,0.8)]" />
+              <span className="text-[9px] font-medium tracking-[0.25em] text-[#475569] uppercase">
                 Nuevo evento
               </span>
             </div>
-            <h3 className="text-lg font-semibold text-white">
+            <h3 className="text-lg font-semibold text-[#0F172A]">
               Registrar evento
             </h3>
           </div>
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-full border border-white/[0.08] bg-white/[0.03] p-2 text-[#94A3B8] transition-colors hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+            className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/60 p-2 text-[#64748B] transition-colors hover:border-[rgba(15,23,42,0.12)] hover:bg-white/80 hover:text-[#0F172A]"
             aria-label="Cerrar"
           >
             <svg
@@ -86,73 +92,65 @@ export const EventForm = ({ onCreated, onCancel }: Props) => {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-2 sm:col-span-2">
-            <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
-              Titulo
-            </label>
+            <label className={LABEL}>Titulo</label>
             <input
               {...register("title", {
                 required: "El titulo es requerido",
                 minLength: { value: 3, message: "Minimo 3 caracteres" },
               })}
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
+              className={INPUT}
               placeholder="Conferencia de IA aplicada"
             />
             {errors.title && (
-              <span className="text-xs text-red-300">
+              <span className="text-xs text-rose-500">
                 {errors.title.message}
               </span>
             )}
           </div>
 
           <div className="flex flex-col gap-2 sm:col-span-2">
-            <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
-              Descripcion
-            </label>
+            <label className={LABEL}>Descripcion</label>
             <textarea
               {...register("description", {
                 required: "La descripcion es requerida",
                 minLength: { value: 5, message: "Minimo 5 caracteres" },
               })}
               rows={3}
-              className="resize-none rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
+              className={`resize-none ${INPUT}`}
               placeholder="De que trata el evento, agenda, ponentes..."
             />
             {errors.description && (
-              <span className="text-xs text-red-300">
+              <span className="text-xs text-rose-500">
                 {errors.description.message}
               </span>
             )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
-              Ubicacion
-            </label>
+            <label className={LABEL}>Ubicacion</label>
             <input
               {...register("location", {
                 required: "La ubicacion es requerida",
               })}
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder-[#94A3B8]/60 outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20"
+              className={INPUT}
               placeholder="Auditorio TECNM Celaya"
             />
             {errors.location && (
-              <span className="text-xs text-red-300">
+              <span className="text-xs text-rose-500">
                 {errors.location.message}
               </span>
             )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-[11px] font-semibold tracking-[0.2em] text-[#94A3B8] uppercase">
-              Fecha
-            </label>
+            <label className={LABEL}>Fecha</label>
             <input
               type="datetime-local"
               {...register("date", { required: "La fecha es requerida" })}
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none transition-all focus:border-[#8B5CF6]/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-[#8B5CF6]/20 [color-scheme:dark]"
+              className={INPUT}
             />
             {errors.date && (
-              <span className="text-xs text-red-300">
+              <span className="text-xs text-rose-500">
                 {errors.date.message}
               </span>
             )}
@@ -160,7 +158,7 @@ export const EventForm = ({ onCreated, onCancel }: Props) => {
         </div>
 
         {serverError && (
-          <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-2.5 text-xs text-red-200 backdrop-blur-sm">
+          <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-2.5 text-xs text-rose-700 backdrop-blur-sm">
             {serverError}
           </div>
         )}
@@ -169,14 +167,14 @@ export const EventForm = ({ onCreated, onCancel }: Props) => {
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(139,92,246,0.55),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:shadow-[0_12px_40px_-6px_rgba(139,92,246,0.75),0_1px_0_0_rgba(255,255,255,0.22)_inset] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:px-6"
+            className="flex-1 rounded-xl bg-gradient-to-r from-[#FF7A00] to-[#FF4FD8] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(255,122,0,0.55),0_1px_0_0_rgba(255,255,255,0.32)_inset] transition-all hover:shadow-[0_12px_40px_-6px_rgba(255,122,0,0.75),0_1px_0_0_rgba(255,255,255,0.4)_inset] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:px-6"
           >
             {submitting ? "Creando..." : "Crear evento"}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-[#D1D5DB] transition-colors hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+            className="rounded-xl border border-[rgba(15,23,42,0.08)] bg-white/60 px-4 py-2.5 text-sm font-medium text-[#475569] transition-colors hover:border-[rgba(15,23,42,0.16)] hover:bg-white/80 hover:text-[#0F172A]"
           >
             Cancelar
           </button>

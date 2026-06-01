@@ -7,6 +7,9 @@ import {
 } from '../services/ticketService'
 import { TicketCard } from '../components/confirmation-page/ticket-card'
 
+const CARD_GLASS =
+  'rounded-2xl border border-[rgba(15,23,42,0.06)] bg-white/65 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.18),0_1px_0_0_rgba(255,255,255,0.9)_inset] backdrop-blur-xl'
+
 export const MyTicketsPage = () => {
   const [tickets, setTickets] = useState<ApiTicket[]>([])
   const [loading, setLoading] = useState(true)
@@ -45,16 +48,16 @@ export const MyTicketsPage = () => {
   return (
     <section className='py-12 sm:py-16'>
       <div className='mb-10'>
-        <div className='mb-3 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-3 py-1 backdrop-blur-xl'>
-          <span className='h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' />
-          <span className='text-[10px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase'>
+        <div className='mb-3 inline-flex items-center gap-2 rounded-full border border-[rgba(15,23,42,0.06)] bg-white/60 px-3 py-1 backdrop-blur-xl'>
+          <span className='h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]' />
+          <span className='text-[10px] font-medium tracking-[0.25em] text-[#475569] uppercase'>
             Acceso personal
           </span>
         </div>
-        <h1 className='text-4xl font-bold tracking-tight text-white sm:text-5xl'>
+        <h1 className='text-4xl font-bold tracking-tight text-[#0F172A] sm:text-5xl'>
           Mis tickets
         </h1>
-        <p className='mt-2 text-sm text-[#94A3B8]'>
+        <p className='mt-2 text-sm text-[#64748B]'>
           {loading
             ? 'Cargando tickets...'
             : `${tickets.length} ${tickets.length === 1 ? 'ticket emitido' : 'tickets emitidos'} en tu cuenta`}
@@ -62,28 +65,28 @@ export const MyTicketsPage = () => {
       </div>
 
       {error && (
-        <div className='mb-6 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200 backdrop-blur-sm'>
+        <div className='mb-6 rounded-2xl border border-rose-200 bg-rose-50/80 px-4 py-3 text-sm text-rose-700 backdrop-blur-sm'>
           {error}
         </div>
       )}
 
       {loading && (
-        <div className='rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-12 text-center shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl'>
-          <span className='inline-flex items-center gap-2 text-sm text-[#94A3B8]'>
-            <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-[#22D3EE]' />
+        <div className={`${CARD_GLASS} p-12 text-center`}>
+          <span className='inline-flex items-center gap-2 text-sm text-[#64748B]'>
+            <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-[#FF7A00]' />
             Cargando tickets...
           </span>
         </div>
       )}
 
       {!loading && tickets.length === 0 && !error && (
-        <div className='rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-12 text-center shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl'>
-          <p className='text-sm text-[#94A3B8]'>
+        <div className={`${CARD_GLASS} p-12 text-center`}>
+          <p className='text-sm text-[#64748B]'>
             Aun no has generado ningun ticket.
           </p>
           <Link
             to='/'
-            className='mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(139,92,246,0.55),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-6px_rgba(139,92,246,0.75),0_1px_0_0_rgba(255,255,255,0.22)_inset]'
+            className='mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF4FD8] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(255,122,0,0.55),0_1px_0_0_rgba(255,255,255,0.32)_inset] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-6px_rgba(255,122,0,0.75),0_1px_0_0_rgba(255,255,255,0.4)_inset]'
           >
             <svg
               className='h-4 w-4'
@@ -117,7 +120,7 @@ export const MyTicketsPage = () => {
               <div className='flex justify-end'>
                 <button
                   onClick={() => handleDelete(t.id)}
-                  className='inline-flex items-center gap-1.5 rounded-full border border-red-400/20 bg-red-500/[0.06] px-3 py-1.5 text-xs font-medium text-red-300 transition-colors hover:border-red-400/40 hover:bg-red-500/[0.12] hover:text-red-200'
+                  className='inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50/60 px-3 py-1.5 text-xs font-medium text-rose-600 transition-colors hover:border-rose-300 hover:bg-rose-100/80 hover:text-rose-700'
                 >
                   <svg
                     className='h-3.5 w-3.5'
