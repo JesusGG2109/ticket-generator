@@ -1,28 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  /* Espacio profundo */
-  --color-deep-950: #050816;
-  --color-deep-900: #0B1026;
-  --color-deep-800: #121A3A;
-  --color-deep-700: #1A2347;
+  /* ============================================================
+     PALETA LUMINOSA — base clara con acentos tech
+     ============================================================ */
 
-  /* Acentos tech */
+  /* Base luminosa */
+  --color-canvas: #F8FAFF;
+  --color-canvas-soft: #EDF2FF;
+  --color-canvas-warm: #FFF5EC;
+
+  /* Texto */
+  --color-ink: #0F172A;
+  --color-ink-soft: #475569;
+  --color-ink-mute: #64748B;
+
+  /* Bordes / glass */
+  --color-line: rgba(15, 23, 42, 0.08);
+  --color-line-soft: rgba(15, 23, 42, 0.05);
+  --color-glass: rgba(255, 255, 255, 0.55);
+  --color-glass-strong: rgba(255, 255, 255, 0.72);
+
+  /* Acentos de lava (paleta cálida nueva) */
+  --color-orange: #FF7A00;
+  --color-amber: #FFB347;
+  --color-coral: #FF6B6B;
+  --color-magenta: #FF4FD8;
+  --color-pink: #FF89C6;
+  --color-cyan-accent: #55D6FF;
+
+  /* Acentos tech (CTA) */
   --color-violet-soft: #7C3AED;
   --color-violet-bright: #8B5CF6;
   --color-blue-soft: #60A5FA;
   --color-cyan-tech: #22D3EE;
 
-  /* Texto */
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #D1D5DB;
-  --color-text-muted: #94A3B8;
-
-  /* Bordes y glass */
-  --color-glass-border: rgba(255, 255, 255, 0.08);
-  --color-glass-bg: rgba(255, 255, 255, 0.03);
-
-  /* Legado (mantener para componentes no migrados) */
+  /* Legado (mantener compatibilidad) */
   --color-Neutral-0: hsl(0, 0%, 100%);
   --color-Neutral-300: hsl(252, 6%, 83%);
   --color-Neutral-500: hsl(245, 15%, 58%);
@@ -39,8 +52,8 @@
 }
 
 html, body, #root {
-  background-color: var(--color-deep-950);
-  color: var(--color-text-primary);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
 }
 
 body {
@@ -53,8 +66,8 @@ body {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.35);
-  color: #fff;
+  background: rgba(255, 122, 0, 0.25);
+  color: var(--color-ink);
 }
 
 ::-webkit-scrollbar {
@@ -62,12 +75,12 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-deep-950);
+  background: var(--color-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.25);
+  background: rgba(15, 23, 42, 0.15);
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.45);
+  background: rgba(15, 23, 42, 0.28);
 }

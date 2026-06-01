@@ -5,15 +5,13 @@ interface Props {
 }
 
 /**
- * MainLayout — usa `isolation: isolate` (utility Tailwind `isolate`) para
- * crear un stacking context que actúa como techo del z-index negativo del
- * <Starfield />. Sin esto, el z-index -10 del Starfield se escapa al
- * stacking context raíz y queda atrapado detrás del background opaco del
- * #root definido en index.css. Confirmado vía test diagnóstico.
+ * `isolate` crea un stacking context que actúa como techo para el z-index
+ * negativo del Starfield. Sin esto, el Starfield queda atrapado detrás
+ * del background del #root.
  */
 export const MainLayout = ({ children }: Props) => {
   return (
-    <div className='relative isolate min-h-screen text-white antialiased'>
+    <div className='relative isolate min-h-screen text-[#0F172A] antialiased'>
       <Starfield />
       <div className='relative z-0'>{children}</div>
     </div>
