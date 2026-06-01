@@ -62,7 +62,15 @@ const Navbar = () => {
   const clearAuth = useAuthStore((state) => state.clearAuth)
 
   return (
-    <header className='sticky top-0 z-50 border-b border-white/[0.06] bg-[rgba(5,8,22,0.7)] shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset] backdrop-blur-xl'>
+    <header
+      className='sticky top-0 z-50 border-b shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset]'
+      style={{
+        background: 'rgba(8,12,24,0.45)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderColor: 'rgba(255,255,255,0.08)',
+      }}
+    >
       <div className='mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6'>
         <Brand />
 

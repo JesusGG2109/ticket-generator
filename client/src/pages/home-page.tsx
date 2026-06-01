@@ -18,10 +18,10 @@ export const HomePage = () => {
     <section className='pb-24'>
       <Hero />
 
-      <div className='mx-auto mt-4 max-w-xl'>
+      <div id='generate-ticket' className='mx-auto mt-4 max-w-xl scroll-mt-24'>
         <div className='mb-10 flex items-center gap-4'>
           <div className='h-px flex-1 bg-gradient-to-r from-transparent via-white/15 to-transparent' />
-          <span className='text-[11px] font-medium tracking-[0.25em] text-[#94A3B8] uppercase'>
+          <span className='text-[11px] font-medium tracking-[0.25em] uppercase' style={{ color: 'rgba(255,255,255,0.58)' }}>
             Genera tu ticket
           </span>
           <div className='h-px flex-1 bg-gradient-to-r from-transparent via-white/15 to-transparent' />
