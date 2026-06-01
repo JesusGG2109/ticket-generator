@@ -45,11 +45,11 @@ export const EventForm = ({ onCreated, onCancel }: Props) => {
     <div className="relative mb-8">
       <div
         aria-hidden="true"
-        className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/25 via-transparent to-[#22D3EE]/20 blur-md"
+        className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 via-transparent to-[#22D3EE]/15 blur-lg"
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative rounded-2xl border border-white/[0.08] bg-[#0B1026]/60 p-6 backdrop-blur-xl sm:p-7"
+        className="relative rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl sm:p-7"
       >
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
@@ -169,7 +169,7 @@ export const EventForm = ({ onCreated, onCancel }: Props) => {
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#22D3EE] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_-6px_rgba(139,92,246,0.6)] transition-all hover:shadow-[0_0_28px_-4px_rgba(139,92,246,0.8)] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:px-6"
+            className="flex-1 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(139,92,246,0.55),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:shadow-[0_12px_40px_-6px_rgba(139,92,246,0.75),0_1px_0_0_rgba(255,255,255,0.22)_inset] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:px-6"
           >
             {submitting ? "Creando..." : "Crear evento"}
           </button>

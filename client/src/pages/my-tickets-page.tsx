@@ -45,7 +45,7 @@ export const MyTicketsPage = () => {
   return (
     <section className='py-12 sm:py-16'>
       <div className='mb-10'>
-        <div className='mb-3 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 backdrop-blur-sm'>
+        <div className='mb-3 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-3 py-1 backdrop-blur-xl'>
           <span className='h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' />
           <span className='text-[10px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase'>
             Acceso personal
@@ -68,7 +68,7 @@ export const MyTicketsPage = () => {
       )}
 
       {loading && (
-        <div className='rounded-2xl border border-white/[0.06] bg-white/[0.02] p-12 text-center backdrop-blur-sm'>
+        <div className='rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-12 text-center shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl'>
           <span className='inline-flex items-center gap-2 text-sm text-[#94A3B8]'>
             <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-[#22D3EE]' />
             Cargando tickets...
@@ -77,13 +77,13 @@ export const MyTicketsPage = () => {
       )}
 
       {!loading && tickets.length === 0 && !error && (
-        <div className='rounded-2xl border border-white/[0.06] bg-white/[0.02] p-12 text-center backdrop-blur-sm'>
+        <div className='rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-12 text-center shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl'>
           <p className='text-sm text-[#94A3B8]'>
             Aun no has generado ningun ticket.
           </p>
           <Link
             to='/'
-            className='mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#22D3EE] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_-4px_rgba(139,92,246,0.5)] transition-all hover:shadow-[0_0_28px_-2px_rgba(139,92,246,0.75)]'
+            className='mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(139,92,246,0.55),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-6px_rgba(139,92,246,0.75),0_1px_0_0_rgba(255,255,255,0.22)_inset]'
           >
             <svg
               className='h-4 w-4'

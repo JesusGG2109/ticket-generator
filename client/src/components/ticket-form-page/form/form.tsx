@@ -87,10 +87,10 @@ export const Form = () => {
     <div className='relative'>
       <div
         aria-hidden='true'
-        className='absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/25 via-transparent to-[#22D3EE]/20 blur-md'
+        className='absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 via-transparent to-[#22D3EE]/15 blur-lg'
       />
       <form
-        className='relative rounded-2xl border border-white/[0.08] bg-[#0B1026]/60 p-6 backdrop-blur-xl sm:p-8'
+        className='relative rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl sm:p-8'
         onSubmit={handleSubmit(sendForm)}
       >
         <UploadInput url={imageDataUrl} onChange={handleChange} />

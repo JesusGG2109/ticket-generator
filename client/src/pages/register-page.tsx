@@ -6,7 +6,7 @@ export const RegisterPage = () => {
     <section className="flex min-h-[calc(100vh-80px)] items-center justify-center py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 backdrop-blur-sm">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-3 py-1 backdrop-blur-xl">
             <span className="h-1.5 w-1.5 rounded-full bg-[#8B5CF6] shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
             <span className="text-[10px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase">
               Nueva cuenta
@@ -21,9 +21,9 @@ export const RegisterPage = () => {
         <div className="relative">
           <div
             aria-hidden="true"
-            className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/30 via-transparent to-[#22D3EE]/20 blur-md"
+            className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 via-transparent to-[#22D3EE]/15 blur-lg"
           />
-          <div className="relative rounded-2xl border border-white/[0.08] bg-[#0B1026]/60 p-6 backdrop-blur-xl sm:p-8">
+          <div className="relative rounded-2xl border border-white/[0.07] bg-[rgba(12,16,36,0.55)] p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-xl sm:p-8">
             <RegisterForm />
           </div>
         </div>

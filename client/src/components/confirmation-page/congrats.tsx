@@ -9,7 +9,7 @@ export const Congrats = () => {
 
   return (
     <>
-      <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 backdrop-blur-sm'>
+      <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-3 py-1 backdrop-blur-xl'>
         <span className='h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' />
         <span className='text-[10px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase'>
           Ticket emitido

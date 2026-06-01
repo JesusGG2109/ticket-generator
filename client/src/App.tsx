@@ -62,7 +62,7 @@ const Navbar = () => {
   const clearAuth = useAuthStore((state) => state.clearAuth)
 
   return (
-    <header className='sticky top-0 z-50 border-b border-white/[0.06] bg-[#050816]/70 backdrop-blur-xl'>
+    <header className='sticky top-0 z-50 border-b border-white/[0.06] bg-[rgba(5,8,22,0.7)] shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset] backdrop-blur-xl'>
       <div className='mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6'>
         <Brand />
 
@@ -101,7 +101,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to='/register'
-                className='rounded-full bg-gradient-to-r from-[#7C3AED] to-[#22D3EE] px-3 py-1.5 text-xs font-semibold text-white shadow-[0_0_20px_-4px_rgba(139,92,246,0.5)] transition-all hover:shadow-[0_0_24px_-2px_rgba(139,92,246,0.65)] sm:px-4'
+                className='rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE] px-3 py-1.5 text-xs font-semibold text-white shadow-[0_6px_20px_-6px_rgba(139,92,246,0.55),0_1px_0_0_rgba(255,255,255,0.18)_inset] transition-all hover:shadow-[0_10px_28px_-4px_rgba(139,92,246,0.75),0_1px_0_0_rgba(255,255,255,0.22)_inset] sm:px-4'
               >
                 Registrarse
               </NavLink>

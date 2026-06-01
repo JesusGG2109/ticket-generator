@@ -1,7 +1,7 @@
 export const Hero = () => {
   return (
     <section className='relative mx-auto max-w-3xl py-16 text-center sm:py-24'>
-      <div className='inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 backdrop-blur-sm'>
+      <div className='inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-4 py-1.5 backdrop-blur-xl'>
         <span className='h-1.5 w-1.5 rounded-full bg-[#22D3EE] shadow-[0_0_8px_rgba(34,211,238,0.8)]' />
         <span className='text-[11px] font-medium tracking-[0.2em] text-[#D1D5DB] uppercase'>
           Edicion 2026 — TECNM
