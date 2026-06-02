@@ -90,7 +90,6 @@ El proyecto no responde a una necesidad empresarial real ni a un cliente externo
 | Lista de eventos | ![Eventos](./docs/images/04-events.svg) |
 | Formulario de creación de evento | ![Form evento](./docs/images/05-event-form.svg) |
 | Mis tickets | ![Mis tickets](./docs/images/06-my-tickets.svg) |
-| Confirmación tras generar ticket | ![Ticket](./docs/images/07-ticket-generated.svg) |
 | Swagger UI (documentación interactiva) | ![Swagger](./docs/images/08-swagger.svg) |
 
 ---
