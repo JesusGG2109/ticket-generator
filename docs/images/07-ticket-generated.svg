@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFEDD5"/>
+      <stop offset="50%" stop-color="#FBCFE8"/>
+      <stop offset="100%" stop-color="#FED7AA"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="40" y="40" width="1520" height="820" rx="24" fill="rgba(255,255,255,0.55)" stroke="rgba(15,23,42,0.06)"/>
+  <text x="800" y="420" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="56" font-weight="800" fill="#0F172A">Confirmacion de ticket</text>
+  <text x="800" y="490" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#475569">Reemplaza este placeholder con tu captura real (1920x1080 PNG)</text>
+  <text x="800" y="540" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="18" fill="#94A3B8">docs/images/07-ticket-generated.png</text>
+</svg>
