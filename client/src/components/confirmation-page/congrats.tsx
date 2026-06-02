@@ -9,28 +9,32 @@ export const Congrats = () => {
 
   return (
     <>
-      <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-[rgba(12,16,36,0.55)] px-3 py-1 backdrop-blur-xl'>
-        <span className='h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' />
-        <span className='text-[10px] font-medium tracking-[0.25em] text-[#D1D5DB] uppercase'>
+      <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-[rgba(15,23,42,0.06)] bg-white/60 px-3 py-1 backdrop-blur-xl'>
+        <span className='h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]' />
+        <span className='text-[10px] font-medium tracking-[0.25em] text-[#475569] uppercase'>
           Ticket emitido
         </span>
       </div>
 
       <h1 className='text-4xl leading-tight font-extrabold tracking-tight sm:text-5xl'>
-        <span className='bg-gradient-to-br from-white to-[#D1D5DB] bg-clip-text text-transparent'>
+        <span className='text-[#0F172A]'>
           Felicidades,{' '}
         </span>
-        <span className='bg-gradient-to-r from-[#8B5CF6] via-[#60A5FA] to-[#22D3EE] bg-clip-text text-transparent'>
+        <span
+          className='bg-clip-text text-transparent'
+          style={{
+            backgroundImage:
+              'linear-gradient(90deg, #FF7A00 0%, #FF4FD8 100%)',
+          }}
+        >
           {name} {lastName}
         </span>
-        <span className='bg-gradient-to-br from-white to-[#D1D5DB] bg-clip-text text-transparent'>
-          .
-        </span>
+        <span className='text-[#0F172A]'>.</span>
       </h1>
 
-      <p className='mx-auto mt-4 max-w-xl text-base text-[#94A3B8]'>
+      <p className='mx-auto mt-4 max-w-xl text-base text-[#475569]'>
         Tu ticket esta listo. Enviamos una copia a{' '}
-        <span className='font-medium text-[#22D3EE]'>{email}</span> y te haremos
+        <span className='font-medium text-[#FF4FD8]'>{email}</span> y te haremos
         llegar actualizaciones previas al evento.
       </p>
     </>
