@@ -23,7 +23,7 @@
 
 ---
 
-## 🚀 Probar aplicación
+##  Probar aplicación
 
 La aplicación está pensada para ser desplegada en un proveedor cloud y consultada en línea.
 
@@ -33,7 +33,7 @@ La aplicación está pensada para ser desplegada en un proveedor cloud y consult
 
 </div>
 
-> 👉 **No es necesario instalar nada** para probar el sistema una vez publicado.
+>  **No es necesario instalar nada** para probar el sistema una vez publicado.
 > Si prefieres ejecutarlo localmente, sigue las instrucciones de [Instalación](#6-instalación).
 
 ---
