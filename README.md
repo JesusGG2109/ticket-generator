@@ -84,13 +84,13 @@ El proyecto no responde a una necesidad empresarial real ni a un cliente externo
 
 | Vista | Captura |
 |---|---|
-| Home — Hero con lava lamps | ![Home](./docs/images/01-home.svg) |
-| Login | ![Login](./docs/images/02-login.svg) |
-| Registro | ![Registro](./docs/images/03-register.svg) |
-| Lista de eventos | ![Eventos](./docs/images/04-events.svg) |
-| Formulario de creación de evento | ![Form evento](./docs/images/05-event-form.svg) |
-| Mis tickets | ![Mis tickets](./docs/images/06-my-tickets.svg) |
-| Swagger UI (documentación interactiva) | ![Swagger](./docs/images/08-swagger.svg) |
+| Home — Hero con lava lamps | ![Home](./docs/images/01-home.png) |
+| Login | ![Login](./docs/images/02-login.png) |
+| Registro | ![Registro](./docs/images/03-register.png) |
+| Lista de eventos | ![Eventos](./docs/images/04-events.png) |
+| Formulario de creación de evento | ![Form evento](./docs/images/05-event-form.png) |
+| Mis tickets | ![Mis tickets](./docs/images/06-my-tickets.png) |
+| Swagger UI (documentación interactiva) | ![Swagger](./docs/images/08-swagger.png) |
 
 ---
 
