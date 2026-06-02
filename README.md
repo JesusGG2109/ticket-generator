@@ -2,7 +2,7 @@
 
 # EventHub TECNM
 
-### Plataforma de gestión de eventos académicos y generación de tickets
+### Sistema web para la gestión de eventos académicos y generación de tickets digitales
 
 **Proyecto integrador de la asignatura de Ingeniería de Software**
 *Tecnológico Nacional de México*
@@ -23,116 +23,210 @@
 
 ---
 
+## 🚀 Probar aplicación
+
+La aplicación está pensada para ser desplegada en un proveedor cloud y consultada en línea.
+
+<div align="center">
+
+[![Abrir EventHub](https://img.shields.io/badge/ABRIR-EVENTHUB-FF7A00?style=for-the-badge&logo=rocket&logoColor=white)](DEPLOY_URL_AQUI)
+
+</div>
+
+> 👉 **No es necesario instalar nada** para probar el sistema una vez publicado.
+> Si prefieres ejecutarlo localmente, sigue las instrucciones de [Instalación](#6-instalación).
+
+---
+
 ## Tabla de contenidos
 
 - [1. Descripción general](#1-descripción-general)
-- [2. Características principales](#2-características-principales)
-- [3. Arquitectura del sistema](#3-arquitectura-del-sistema)
-- [4. Estructura del proyecto](#4-estructura-del-proyecto)
-- [5. Tecnologías utilizadas](#5-tecnologías-utilizadas)
+- [2. Vista previa](#2-vista-previa)
+- [3. Funcionalidades](#3-funcionalidades)
+- [4. Tecnologías utilizadas](#4-tecnologías-utilizadas)
+- [5. Arquitectura del sistema](#5-arquitectura-del-sistema)
 - [6. Instalación](#6-instalación)
 - [7. Variables de entorno](#7-variables-de-entorno)
 - [8. Ejecución](#8-ejecución)
 - [9. API REST](#9-api-rest)
 - [10. Base de datos](#10-base-de-datos)
 - [11. Flujo de usuario](#11-flujo-de-usuario)
-- [12. Capturas del sistema](#12-capturas-del-sistema)
+- [12. Estructura del proyecto](#12-estructura-del-proyecto)
 - [13. Testing](#13-testing)
-- [14. Decisiones de ingeniería de software](#14-decisiones-de-ingeniería-de-software)
-- [15. Retos encontrados](#15-retos-encontrados)
-- [16. Resultados obtenidos](#16-resultados-obtenidos)
-- [17. Trabajo en equipo](#17-trabajo-en-equipo)
-- [18. Conclusiones](#18-conclusiones)
-- [19. Futuras mejoras](#19-futuras-mejoras)
-- [20. Licencia](#20-licencia)
+- [14. Metodología](#14-metodología)
+- [15. Artefactos del proyecto](#15-artefactos-del-proyecto)
+- [16. Decisiones de ingeniería de software](#16-decisiones-de-ingeniería-de-software)
+- [17. Retos encontrados](#17-retos-encontrados)
+- [18. Resultados obtenidos](#18-resultados-obtenidos)
+- [19. Equipo](#19-equipo)
+- [20. Conclusiones](#20-conclusiones)
+- [21. Futuras mejoras](#21-futuras-mejoras)
+- [22. Licencia](#22-licencia)
 
 ---
 
 ## 1. Descripción general
 
-**EventHub TECNM** es una plataforma web fullstack diseñada para resolver tres necesidades concretas detectadas en el contexto académico del Tecnológico Nacional de México:
+**EventHub TECNM** es el proyecto integrador desarrollado para la asignatura de **Ingeniería de Software** del Tecnológico Nacional de México. Como parte de la materia, el profesor planteó al grupo construir un sistema web a partir de dos opciones permitidas:
 
-1. **Gestión de eventos académicos** (congresos, conferencias, talleres) por parte de los propios usuarios, sin depender de hojas de cálculo dispersas ni canales no oficiales.
-2. **Emisión y conservación de tickets personalizados** de asistencia, con datos del participante (nombre, correo, GitHub, avatar) persistidos de forma segura y consultables desde cualquier sesión.
-3. **Aislamiento total entre usuarios**: cada cuenta gestiona únicamente sus propios eventos y tickets, garantizado tanto a nivel de UI como de API.
+- Carrito de compras
+- Generador de tickets
 
-### Público objetivo
+Nuestro equipo eligió la **segunda opción**: un generador de tickets enfocado en eventos académicos. A partir de esa base, el proyecto fue evolucionando conforme el profesor introducía nuevos requisitos durante el semestre (autenticación, gestión de eventos asociada al usuario, persistencia real de tickets, documentación de API, pruebas automatizadas y una dirección visual coherente), hasta consolidarse en lo que hoy se entrega como **EventHub TECNM**.
 
-- **Estudiantes y docentes del TECNM** que organizan o asisten a eventos académicos.
-- **Asistentes externos** que necesitan un comprobante visual de su registro.
-- **Equipos de logística** que requieren un catálogo digital de eventos por cuenta.
-
-### ¿Qué problema resuelve?
-
-Antes de EventHub, la organización de eventos académicos universitarios se solía coordinar con formularios desconectados, hojas de cálculo compartidas y tickets impresos sin trazabilidad. EventHub centraliza el flujo en una única aplicación con autenticación real, persistencia en base de datos relacional y una experiencia visual moderna que refleja el nivel de profesionalismo esperado para una entrega de Ingeniería de Software.
+El proyecto no responde a una necesidad empresarial real ni a un cliente externo: es un ejercicio académico cuyo valor reside en la aplicación práctica de los conceptos de Ingeniería de Software — separación de responsabilidades, control de versiones, validación, pruebas, documentación y trabajo en equipo.
 
 ---
 
-## 2. Características principales
+## 2. Vista previa
 
-### Autenticación y usuarios
-- ✅ Registro de usuarios con validación de email único.
-- ✅ Inicio de sesión con verificación bcrypt de contraseña hasheada.
-- ✅ Emisión de **JSON Web Tokens (JWT)** firmados con secreto del servidor.
-- ✅ Middleware de protección de rutas backend.
-- ✅ Endpoint `GET /api/auth/me` para recuperar usuario actual.
-- ✅ Persistencia de sesión en `localStorage` mediante Zustand `persist`.
-- ✅ Interceptor Axios que inyecta `Bearer <token>` en cada request.
-- ✅ Auto-logout cuando el backend responde 401 (token expirado/inválido).
-- ✅ Rutas privadas en frontend con `<ProtectedRoute>`.
-- ✅ Navbar dinámico según estado de sesión.
-- ✅ Campo `role` en modelo User con default `"user"` (preparado para autorización futura).
+> Las imágenes viven en `docs/images/`. Mientras no se sustituyan por capturas reales, se muestran placeholders SVG con el layout esperado. Reemplázalos por PNG (1920×1080) con el mismo nombre y la sección se actualizará automáticamente.
 
-### Gestión de eventos
-- ✅ CRUD completo de eventos (crear, listar, editar inline, eliminar).
-- ✅ **Cada evento queda asociado al usuario que lo creó** (`userId` FK).
-- ✅ Listado scopeado: cada usuario ve únicamente **sus** eventos.
-- ✅ Búsqueda por título en cliente.
-- ✅ Validación con Zod tanto en backend como con react-hook-form en cliente.
-- ✅ Comprobación de propiedad (ownership) en `GET /:id`, `PUT` y `DELETE` → respuesta 403 si el evento pertenece a otro usuario.
-- ✅ Formulario de creación con campos: título, descripción, ubicación, fecha y hora.
-
-### Gestión de tickets
-- ✅ Generación de ticket personalizado desde el Hero.
-- ✅ Subida de avatar (data URL persistible en base de datos).
-- ✅ Diseño de **boarding pass premium** (vidrio claro, glow cálido, separador perforado).
-- ✅ Página `/mis-tickets` con listado, contador y eliminación.
-- ✅ Orden DESC por fecha de creación.
-- ✅ Persistencia real: los tickets sobreviven a refresh, logout y cambios de dispositivo.
-- ✅ Aislamiento entre usuarios verificado con tests automatizados.
-
-### Infraestructura y calidad
-- ✅ **50 tests automatizados** con Jest + Supertest (SQLite en memoria para aislamiento).
-- ✅ Documentación interactiva **Swagger UI / OpenAPI 3.0** en `/api/docs`.
-- ✅ Endpoint de healthcheck `/api/health` para monitoreo.
-- ✅ Variables de entorno separadas para cliente y servidor con `.env.example` versionado.
-- ✅ Manejador centralizado de errores con respuestas JSON consistentes.
-- ✅ Middleware de validación de IDs numéricos.
-- ✅ `process.on('uncaughtException')` y `process.on('unhandledRejection')` como red de seguridad.
-- ✅ CORS configurable vía `CORS_ORIGIN`.
-- ✅ Modo `production` omite `sequelize.sync()` para no destruir datos por accidente.
-- ✅ Historial Git con **56 commits semánticos** separados por funcionalidad.
-
-### Experiencia visual
-- ✅ Tema luminoso **"Lava Lamps Premium"** inspirado en Apple Vision Pro / Linear / Arc Browser.
-- ✅ 7 masas de energía orgánicas con `border-radius` asimétrico animado y mezcla de color via `mix-blend-mode: multiply`.
-- ✅ Glassmorphism real estilo iOS / visionOS con bordes iluminados.
-- ✅ Botón primary con gradiente naranja → magenta y sombra cinematográfica.
-- ✅ Tipografía **Inter** + **JetBrains Mono** (Google Fonts con preconnect).
-- ✅ Contraste AAA en texto principal (`#0F172A` sobre `#F8FAFF`).
-- ✅ Respeto a `prefers-reduced-motion`.
+| Vista | Captura |
+|---|---|
+| Home — Hero con lava lamps | ![Home](./docs/images/01-home.svg) |
+| Login | ![Login](./docs/images/02-login.svg) |
+| Registro | ![Registro](./docs/images/03-register.svg) |
+| Lista de eventos | ![Eventos](./docs/images/04-events.svg) |
+| Formulario de creación de evento | ![Form evento](./docs/images/05-event-form.svg) |
+| Mis tickets | ![Mis tickets](./docs/images/06-my-tickets.svg) |
+| Confirmación tras generar ticket | ![Ticket](./docs/images/07-ticket-generated.svg) |
+| Swagger UI (documentación interactiva) | ![Swagger](./docs/images/08-swagger.svg) |
 
 ---
 
-## 3. Arquitectura del sistema
+## 3. Funcionalidades
+
+| Categoría | Funcionalidad | Estado |
+|---|---|:---:|
+| **Autenticación** | Registro de usuarios con email único | ✅ |
+| | Inicio de sesión con verificación bcrypt | ✅ |
+| | Emisión de JSON Web Tokens (JWT) firmados | ✅ |
+| | Middleware de protección de rutas backend | ✅ |
+| | Endpoint `GET /api/auth/me` | ✅ |
+| | Persistencia de sesión en `localStorage` (Zustand `persist`) | ✅ |
+| | Interceptor Axios que inyecta `Bearer <token>` | ✅ |
+| | Auto-logout cuando el backend responde 401 | ✅ |
+| | Rutas privadas en frontend con `<ProtectedRoute>` | ✅ |
+| | Navbar dinámico según estado de sesión | ✅ |
+| **Eventos** | CRUD completo (crear, listar, editar inline, eliminar) | ✅ |
+| | Cada evento queda asociado al usuario que lo creó (`userId` FK) | ✅ |
+| | Listado scopeado: cada usuario ve únicamente sus eventos | ✅ |
+| | Búsqueda por título en cliente | ✅ |
+| | Validación dual con Zod (backend) y react-hook-form (frontend) | ✅ |
+| | Comprobación de propiedad (403 si pertenece a otro usuario) | ✅ |
+| **Tickets** | Generación de ticket personalizado desde el Hero | ✅ |
+| | Subida de avatar como data URL persistible | ✅ |
+| | Diseño de boarding pass premium (vidrio claro, glow, separador perforado) | ✅ |
+| | Página `/mis-tickets` con listado, contador y eliminación | ✅ |
+| | Orden DESC por fecha de creación | ✅ |
+| | Persistencia real (sobreviven refresh, logout y cambios de dispositivo) | ✅ |
+| | Aislamiento entre usuarios verificado con tests automatizados | ✅ |
+| **Infraestructura** | 50 tests automatizados con Jest + Supertest | ✅ |
+| | Documentación interactiva Swagger UI / OpenAPI 3.0 en `/api/docs` | ✅ |
+| | Endpoint de healthcheck `/api/health` | ✅ |
+| | Variables de entorno separadas con `.env.example` versionado | ✅ |
+| | Manejador centralizado de errores con respuestas JSON consistentes | ✅ |
+| | Middleware de validación de IDs numéricos | ✅ |
+| | Handlers globales `uncaughtException` y `unhandledRejection` | ✅ |
+| | CORS configurable vía `CORS_ORIGIN` | ✅ |
+| **Experiencia visual** | Tema luminoso "Lava Lamps Premium" inspirado en Vision Pro / Linear / Arc | ✅ |
+| | 7 masas orgánicas animadas con `mix-blend-mode: multiply` | ✅ |
+| | Glassmorphism real estilo iOS / visionOS con bordes iluminados | ✅ |
+| | Botón primary con gradiente naranja → magenta | ✅ |
+| | Tipografía Inter + JetBrains Mono | ✅ |
+| | Contraste AAA en texto principal | ✅ |
+| | Respeto a `prefers-reduced-motion` | ✅ |
+| | Diseño responsive (mobile / tablet / desktop) | ✅ |
+
+---
+
+## 4. Tecnologías utilizadas
+
+### Frontend
+
+[![React](https://img.shields.io/badge/React-19.1-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-rolldown%207.1-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![React Router](https://img.shields.io/badge/React%20Router-7.15-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com)
+[![Zustand](https://img.shields.io/badge/Zustand-5.0-A35E2B)](https://zustand-demo.pmnd.rs)
+[![Axios](https://img.shields.io/badge/Axios-1.16-5A29E4?logo=axios&logoColor=white)](https://axios-http.com)
+[![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-7.66-EC5990)](https://react-hook-form.com)
+
+| Tecnología | Versión | Uso |
+|---|---|---|
+| React | 19.1.1 | Librería de UI declarativa |
+| TypeScript | 5.9 | Tipado estático |
+| Vite (rolldown) | 7.1.14 | Bundler y dev server con HMR |
+| React Router DOM | 7.15.1 | Routing SPA |
+| React Hook Form | 7.66.1 | Manejo eficiente de formularios |
+| Zustand | 5.0.9 | Estado global con middleware `persist` |
+| Axios | 1.16.1 | Cliente HTTP con interceptores |
+| TailwindCSS | 4.1.16 | Utility-first CSS con tokens `@theme` |
+
+### Backend
+
+[![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A518-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![Express](https://img.shields.io/badge/Express-5.2-000000?logo=express&logoColor=white)](https://expressjs.com)
+[![Sequelize](https://img.shields.io/badge/Sequelize-6.37-52B0E7?logo=sequelize&logoColor=white)](https://sequelize.org)
+[![JWT](https://img.shields.io/badge/JWT-9.0-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io)
+[![Zod](https://img.shields.io/badge/Zod-4.4-3068B7)](https://zod.dev)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI%203.0-85EA2D?logo=swagger&logoColor=black)](./server/src/config/swagger.js)
+
+| Tecnología | Versión | Uso |
+|---|---|---|
+| Node.js | ≥ 18 | Runtime |
+| Express | 5.2.1 | Framework HTTP |
+| Sequelize | 6.37.8 | ORM relacional |
+| Zod | 4.4.3 | Validación de schemas |
+| bcryptjs | 3.0.3 | Hashing de contraseñas |
+| jsonwebtoken | 9.0.3 | Emisión y verificación de JWT |
+| dotenv | 17.4.2 | Carga de variables de entorno |
+| cors | 2.8.6 | CORS configurable |
+| swagger-ui-express | 5.0.1 | Documentación interactiva |
+| swagger-jsdoc | 6.3.0 | Spec OpenAPI desde anotaciones JSDoc |
+
+### Base de datos
+
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![SQLite](https://img.shields.io/badge/SQLite-en%20memoria%20para%20tests-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org)
+
+| Tecnología | Uso |
+|---|---|
+| PostgreSQL ≥ 14 | Base de datos productiva y de desarrollo |
+| SQLite (en memoria) | Base de datos para los 50 tests automatizados |
+| pg / pg-hstore | Drivers PostgreSQL para Sequelize |
+
+### Herramientas de desarrollo
+
+[![Jest](https://img.shields.io/badge/Jest-30.4-C21325?logo=jest&logoColor=white)](https://jestjs.io)
+[![Supertest](https://img.shields.io/badge/Supertest-7.2-grey)](https://github.com/ladjs/supertest)
+[![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)](https://git-scm.com)
+[![GitHub](https://img.shields.io/badge/GitHub-Projects-181717?logo=github&logoColor=white)](https://github.com/JesusGG2109/ticket-generator)
+[![Nodemon](https://img.shields.io/badge/Nodemon-3.1-76D04B?logo=nodemon&logoColor=white)](https://nodemon.io)
+[![ESLint](https://img.shields.io/badge/ESLint-9.36-4B32C3?logo=eslint&logoColor=white)](https://eslint.org)
+
+| Herramienta | Uso |
+|---|---|
+| Jest | Test runner para la suite del backend |
+| Supertest | Tests HTTP de la API sin levantar puerto real |
+| Nodemon | Hot reload del backend en desarrollo |
+| ESLint | Linter del código frontend |
+| Git | Control de versiones |
+| GitHub | Hosting del repositorio y tablero de gestión |
+
+---
+
+## 5. Arquitectura del sistema
 
 ### Visión general
 
 ```mermaid
 flowchart LR
     U(["Usuario"])
-    F["Frontend<br/>React + Vite<br/>(:5173)"]
-    B["Backend<br/>Express + Node<br/>(:3000)"]
+    F["Frontend - React Vite - Puerto 5173"]
+    B["Backend - Express Node - Puerto 3000"]
     DB[("PostgreSQL")]
 
     U <-->|HTTP / JSON| F
@@ -144,7 +238,7 @@ flowchart LR
     style DB fill:#DCFCE7,stroke:#22C55E,color:#0F172A
 ```
 
-El sistema sigue una arquitectura **cliente-servidor desacoplada** con tres responsabilidades claramente separadas. El frontend y el backend viven en directorios independientes (`client/` y `server/`) con sus propios `package.json`, lo cual permite desplegarlos por separado (Vercel/Netlify para el cliente, Render/Railway para el servidor).
+El sistema sigue una arquitectura **cliente-servidor desacoplada** con tres responsabilidades claramente separadas. El frontend y el backend viven en directorios independientes (`client/` y `server/`) con sus propios `package.json`, lo cual permite desplegarlos por separado.
 
 ### Flujo de una petición autenticada
 
@@ -152,31 +246,31 @@ El sistema sigue una arquitectura **cliente-servidor desacoplada** con tres resp
 sequenceDiagram
     autonumber
     participant U as Usuario
-    participant FE as Frontend (React)
+    participant FE as Frontend React
     participant LS as localStorage
-    participant API as Backend (Express)
+    participant API as Backend Express
     participant MW as authMiddleware
     participant DB as PostgreSQL
 
     U->>FE: Submit form de login
-    FE->>API: POST /api/auth/login {email, password}
-    API->>DB: SELECT * FROM Users WHERE email=?
+    FE->>API: POST /api/auth/login email password
+    API->>DB: SELECT FROM Users WHERE email
     DB-->>API: user con passwordHash
     API->>API: bcrypt.compare()
-    API->>API: jwt.sign({id, email, role})
-    API-->>FE: 200 {user, token}
-    FE->>LS: Persist {user, token} via Zustand
+    API->>API: jwt.sign id email role
+    API-->>FE: 200 user y token
+    FE->>LS: Persist user y token via Zustand
     FE-->>U: Redirect /eventos
 
-    Note over FE,API: Petición protegida posterior
+    Note over FE,API: Peticion protegida posterior
     FE->>LS: read token
-    FE->>API: GET /api/events<br/>Authorization: Bearer <token>
+    FE->>API: GET /api/events con Bearer token
     API->>MW: verify JWT
-    MW->>MW: jwt.verify() → req.user
+    MW->>MW: jwt.verify y req.user
     MW->>API: next()
-    API->>DB: SELECT * FROM Events WHERE userId=?
+    API->>DB: SELECT FROM Events WHERE userId
     DB-->>API: events del usuario
-    API-->>FE: 200 [eventos]
+    API-->>FE: 200 eventos
     FE-->>U: Render lista
 ```
 
@@ -184,147 +278,14 @@ sequenceDiagram
 
 | Patrón | Dónde | Por qué |
 |---|---|---|
-| **MVC + Validators** | Backend (`controllers/`, `models/`, `routes/`, `validators/`) | Separación responsabilidades clásica de Express, facilita testing y mantenimiento |
-| **Service layer** | Frontend (`services/`) | Toda comunicación HTTP centralizada; los componentes consumen funciones tipadas |
-| **App factory** | `server/src/app.js` | Función `createApp()` que devuelve la app Express sin iniciar `listen()`, indispensable para Supertest |
-| **Interceptor pattern** | `client/src/services/api.ts` | Inyección automática de `Bearer <token>` y manejo central de 401 |
-| **Store persistido** | Zustand + `persist` middleware | Sesión sobrevive a refresh con clave `auth-storage` en localStorage |
-| **Protected Route** | `<ProtectedRoute>` HOC | Redirección a `/login` si `isAuthenticated === false` |
-| **Ownership check** | Controllers de Events y Tickets | `if (resource.userId !== req.user.id) return 403` |
-| **Centralized error middleware** | `error.middleware.js` | Respuestas JSON consistentes; nunca HTML default de Express |
-
----
-
-## 4. Estructura del proyecto
-
-```
-conference-ticket-generator/
-├── .claude/                              # Launch configs para Claude Code preview
-│   └── launch.json
-├── docs/
-│   └── images/                           # Capturas referenciadas en este README
-│
-├── client/                               # ── FRONTEND (React + Vite) ──
-│   ├── public/
-│   │   └── assets/
-│   ├── src/
-│   │   ├── assets/                       # SVGs inline (icon-info)
-│   │   ├── components/
-│   │   │   ├── auth/                     # login-form, register-form, protected-route
-│   │   │   ├── confirmation-page/        # congrats, ticket, ticket-card, confirmation-page
-│   │   │   ├── events-list/              # events-list, event-form
-│   │   │   ├── layouts/                  # main-layout, starfield (lava lamps)
-│   │   │   └── ticket-form-page/         # hero, form/{form, text-input, upload-input, button}
-│   │   ├── contexts/                     # show-ticket context
-│   │   ├── hooks/                        # use-show-ticket
-│   │   ├── pages/                        # home, events, login, register, my-tickets
-│   │   ├── services/
-│   │   │   ├── api.ts                    # Instancia Axios + interceptor JWT
-│   │   │   ├── authService.ts            # register, login, getMe
-│   │   │   ├── eventService.ts           # CRUD eventos
-│   │   │   └── ticketService.ts          # CRUD tickets
-│   │   ├── store/
-│   │   │   ├── auth.ts                   # Zustand + persist (token + user)
-│   │   │   └── user.ts                   # Datos del ticket actual (transitorio)
-│   │   ├── App.tsx                       # Router + navbar dinámico
-│   │   ├── main.tsx                      # createRoot + StrictMode + ShowTicketProvider
-│   │   └── index.css                     # Tokens @theme + body bg luminoso
-│   ├── index.html
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── vite.config.ts
-│   └── .env.example
-│
-├── server/                               # ── BACKEND (Node + Express) ──
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── database.js               # Sequelize → Postgres (dev/prod) | SQLite (tests)
-│   │   │   └── swagger.js                # Spec OpenAPI 3.0.3
-│   │   ├── controllers/
-│   │   │   ├── auth.controller.js        # register, login, me
-│   │   │   ├── event.controller.js       # CRUD eventos con ownership check
-│   │   │   └── ticket.controller.js      # CRUD tickets con ownership check
-│   │   ├── middlewares/
-│   │   │   ├── auth.middleware.js        # Verifica JWT y pobla req.user
-│   │   │   ├── error.middleware.js       # Handler central JSON
-│   │   │   └── validateId.middleware.js  # Rechaza IDs no numéricos (400)
-│   │   ├── models/
-│   │   │   ├── Event.js                  # title, description, location, date, userId FK
-│   │   │   ├── Ticket.js                 # name, email, github, avatar, userId FK
-│   │   │   ├── User.js                   # name, email, passwordHash, role
-│   │   │   └── index.js                  # Asociaciones hasMany / belongsTo
-│   │   ├── routes/
-│   │   │   ├── auth.routes.js            # Documentadas con @swagger
-│   │   │   ├── event.routes.js
-│   │   │   └── ticket.routes.js
-│   │   ├── validators/
-│   │   │   ├── authValidator.js          # Zod: registerSchema, loginSchema
-│   │   │   ├── eventValidator.js         # Zod: eventSchema
-│   │   │   └── ticketValidator.js        # Zod: createTicketSchema
-│   │   ├── app.js                        # Factory createApp() — testeable
-│   │   └── index.js                      # Bootstrap: env + listen + handlers globales
-│   ├── tests/
-│   │   ├── env.js                        # NODE_ENV=test + JWT_SECRET de prueba
-│   │   ├── setup.js                      # globalSetup Jest
-│   │   ├── teardown.js                   # globalTeardown Jest
-│   │   ├── health.test.js                # Smoke bootstrap (2 tests)
-│   │   ├── auth.test.js                  # 12 tests
-│   │   ├── events.test.js                # 19 tests (incluye aislamiento)
-│   │   └── tickets.test.js               # 17 tests (incluye aislamiento)
-│   ├── jest.config.js
-│   ├── package.json
-│   ├── .env.example
-│   └── .env                              # NO commiteado
-│
-├── .gitignore
-└── README.md                             # Este archivo
-```
-
----
-
-## 5. Tecnologías utilizadas
-
-### Frontend (`client/`)
-
-| Tecnología | Versión | Propósito |
-|---|---|---|
-| **React** | 19.1.1 | Librería de UI declarativa |
-| **TypeScript** | 5.9 | Tipado estático |
-| **Vite** (rolldown-vite) | 7.1.14 | Bundler y dev server con HMR |
-| **React Router DOM** | 7.15.1 | Routing SPA + NavLink + `<Navigate>` |
-| **React Hook Form** | 7.66.1 | Manejo eficiente de formularios |
-| **Zustand** | 5.0.9 | Estado global ligero con middleware `persist` |
-| **Axios** | 1.16.1 | Cliente HTTP con interceptores |
-| **TailwindCSS** | 4.1.16 | Utility-first CSS con tokens `@theme` |
-| **@tailwindcss/vite** | 4.1.16 | Plugin Tailwind nativo de Vite |
-
-### Backend (`server/`)
-
-| Tecnología | Versión | Propósito |
-|---|---|---|
-| **Node.js** | ≥18 | Runtime |
-| **Express** | 5.2.1 | Framework HTTP |
-| **Sequelize** | 6.37.8 | ORM relacional |
-| **PostgreSQL** | ≥14 | Base de datos productiva |
-| **pg + pg-hstore** | 8.20 / 2.3 | Driver Postgres |
-| **Zod** | 4.4.3 | Validación de schemas |
-| **bcryptjs** | 3.0.3 | Hashing de contraseñas |
-| **jsonwebtoken** | 9.0.3 | Emisión y verificación de JWT |
-| **dotenv** | 17.4.2 | Carga de variables de entorno |
-| **cors** | 2.8.6 | CORS configurable |
-| **swagger-ui-express** | 5.0.1 | Documentación interactiva |
-| **swagger-jsdoc** | 6.3.0 | Spec OpenAPI desde anotaciones JSDoc |
-
-### Testing y desarrollo
-
-| Tecnología | Versión | Uso |
-|---|---|---|
-| **Jest** | 30.4.2 | Test runner |
-| **Supertest** | 7.2.2 | Tests HTTP de la API sin levantar puerto real |
-| **sqlite3** | 6.0.1 | Base de datos en memoria para tests aislados |
-| **nodemon** | 3.1.14 | Hot reload del backend en dev |
-
-> **Nota sobre la base de datos**: El brief académico mencionaba MySQL. La implementación final utiliza **PostgreSQL** porque Sequelize soporta ambos con la misma API y Postgres ofrece tipos JSON nativos y mejor manejo de transacciones, ventaja relevante para la fase de roles futura. La migración a MySQL es trivial: cambiar `dialect: "postgres"` por `dialect: "mysql"` y los drivers correspondientes.
+| **MVC + Validators** | Backend | Separación de responsabilidades clásica de Express |
+| **Service layer** | Frontend (`services/`) | Toda la comunicación HTTP centralizada y tipada |
+| **App factory** | `server/src/app.js` | `createApp()` permite tests con Supertest sin abrir puerto |
+| **Interceptor pattern** | `client/src/services/api.ts` | Inyección automática del token + manejo central de 401 |
+| **Store persistido** | Zustand + `persist` | Sesión sobrevive a refresh con clave `auth-storage` |
+| **Protected Route** | `<ProtectedRoute>` | Redirección a `/login` si no hay sesión |
+| **Ownership check** | Controllers Events y Tickets | `if (resource.userId !== req.user.id) return 403` |
+| **Centralized error middleware** | `error.middleware.js` | Respuestas JSON consistentes en todos los errores |
 
 ---
 
@@ -352,7 +313,7 @@ npm install
 
 # 4. Configurar variables de entorno del backend
 cp .env.example .env
-# Editar server/.env con tus credenciales (ver sección 7)
+# Editar server/.env con tus credenciales
 
 # 5. Instalar dependencias del frontend
 cd ../client
@@ -379,7 +340,7 @@ La sincronización de tablas (`sequelize.sync()`) ocurre **automáticamente al a
 | `DB_PASSWORD` | Contraseña PostgreSQL | `tu_password_seguro` |
 | `DB_HOST` | Host de la base de datos | `localhost` |
 | `DB_PORT` | Puerto PostgreSQL | `5432` |
-| `JWT_SECRET` | Secreto para firmar JWT (¡cambiar en producción!) | cadena larga aleatoria |
+| `JWT_SECRET` | Secreto para firmar JWT (cambiar en producción) | cadena larga aleatoria |
 | `JWT_EXPIRES_IN` | Tiempo de vida del token | `7d` |
 | `CORS_ORIGIN` | Origen(es) permitido(s) — `*` o lista separada por comas | `*` |
 
@@ -438,8 +399,8 @@ NODE_ENV=production npm start
 # Frontend
 cd client
 npm install
-npm run build           # Genera dist/
-npm run preview         # Sirve dist/ localmente para verificar
+npm run build
+npm run preview
 ```
 
 El `dist/` del cliente puede desplegarse en Vercel/Netlify; el `server/` en Render/Railway/Fly.io.
@@ -447,6 +408,7 @@ El `dist/` del cliente puede desplegarse en Vercel/Netlify; el `server/` en Rend
 ### Scripts disponibles
 
 **Backend** (`server/package.json`):
+
 | Script | Acción |
 |---|---|
 | `npm run dev` | Arranca con nodemon (hot reload) |
@@ -455,6 +417,7 @@ El `dist/` del cliente puede desplegarse en Vercel/Netlify; el `server/` en Rend
 | `npm run test:watch` | Tests en modo watch |
 
 **Frontend** (`client/package.json`):
+
 | Script | Acción |
 |---|---|
 | `npm run dev` | Arranca Vite dev server |
@@ -466,21 +429,19 @@ El `dist/` del cliente puede desplegarse en Vercel/Netlify; el `server/` en Rend
 
 ## 9. API REST
 
-> Base URL: `http://localhost:3000/api`
-> Documentación interactiva: **`/api/docs`** (Swagger UI con autenticación JWT)
-> Spec JSON: **`/api/docs.json`** (OpenAPI 3.0.3 importable a Postman/Insomnia)
+> **Base URL:** `http://localhost:3000/api`
+> **Documentación interactiva:** `/api/docs` (Swagger UI con autenticación JWT)
+> **Spec JSON:** `/api/docs.json` (OpenAPI 3.0.3 importable a Postman/Insomnia)
 
 ### Auth
 
 | Método | Ruta | Protegido | Descripción |
-|---|---|---|---|
-| `POST` | `/auth/register` | No | Crea usuario y devuelve JWT |
-| `POST` | `/auth/login` | No | Autentica y devuelve JWT |
-| `GET` | `/auth/me` | 🔒 Sí | Devuelve el usuario autenticado |
+|---|---|:---:|---|
+| `POST` | `/auth/register` | — | Crea usuario y devuelve JWT |
+| `POST` | `/auth/login` | — | Autentica y devuelve JWT |
+| `GET` | `/auth/me` | 🔒 | Devuelve el usuario autenticado |
 
-**`POST /api/auth/register`**
-
-Request:
+**`POST /api/auth/register`** — request:
 ```json
 {
   "name": "Jesus Garcia",
@@ -492,75 +453,35 @@ Request:
 Response `201`:
 ```json
 {
-  "user": { "id": 1, "name": "Jesus Garcia", "email": "jesus@tecnm.mx", "role": "user", "createdAt": "...", "updatedAt": "..." },
+  "user": { "id": 1, "name": "Jesus Garcia", "email": "jesus@tecnm.mx", "role": "user" },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
-
-Errores:
-- `400` Datos inválidos (Zod)
-- `409` Email ya registrado
 
 ### Events
 
 > **Todas las rutas requieren JWT y devuelven únicamente los eventos del usuario autenticado.**
 
 | Método | Ruta | Protegido | Descripción |
-|---|---|---|---|
-| `GET` | `/events` | 🔒 Sí | Lista los eventos del usuario (ordenados por fecha ASC) |
-| `POST` | `/events` | 🔒 Sí | Crea un evento asociado al usuario |
-| `GET` | `/events/:id` | 🔒 Sí | Obtiene un evento propio por ID |
-| `PUT` | `/events/:id` | 🔒 Sí | Actualiza un evento propio |
-| `DELETE` | `/events/:id` | 🔒 Sí | Elimina un evento propio |
-
-**`POST /api/events`**
-
-Request:
-```json
-{
-  "title": "Conferencia de IA aplicada",
-  "description": "Charla magistral sobre IA en educación",
-  "location": "Auditorio TECNM Celaya",
-  "date": "2026-09-15T18:00:00.000Z"
-}
-```
-
-Response `201`: el evento creado con `userId` del autenticado.
-
-Errores:
-- `400` Datos inválidos / ID no numérico
-- `401` Token ausente o inválido
-- `403` Intento de acceso a evento de otro usuario
-- `404` Evento no encontrado
+|---|---|:---:|---|
+| `GET` | `/events` | 🔒 | Lista los eventos del usuario |
+| `POST` | `/events` | 🔒 | Crea un evento asociado al usuario |
+| `GET` | `/events/:id` | 🔒 | Obtiene un evento propio por ID |
+| `PUT` | `/events/:id` | 🔒 | Actualiza un evento propio |
+| `DELETE` | `/events/:id` | 🔒 | Elimina un evento propio |
 
 ### Tickets
 
 > **Todas las rutas requieren JWT. Cada usuario solo ve y manipula sus propios tickets.**
 
 | Método | Ruta | Protegido | Descripción |
-|---|---|---|---|
-| `POST` | `/tickets` | 🔒 Sí | Crea un ticket asociado al usuario |
-| `GET` | `/tickets/me` | 🔒 Sí | Lista los tickets del usuario (más reciente primero) |
-| `GET` | `/tickets/:id` | 🔒 Sí | Obtiene un ticket propio por ID |
-| `DELETE` | `/tickets/:id` | 🔒 Sí | Elimina un ticket propio |
+|---|---|:---:|---|
+| `POST` | `/tickets` | 🔒 | Crea un ticket asociado al usuario |
+| `GET` | `/tickets/me` | 🔒 | Lista los tickets del usuario (más reciente primero) |
+| `GET` | `/tickets/:id` | 🔒 | Obtiene un ticket propio por ID |
+| `DELETE` | `/tickets/:id` | 🔒 | Elimina un ticket propio |
 
-**`POST /api/tickets`**
-
-Request:
-```json
-{
-  "name": "Jesus Garcia",
-  "email": "jesus@tecnm.mx",
-  "github": "@jesusgg",
-  "avatar": "data:image/png;base64,..."
-}
-```
-
-`github` y `avatar` son opcionales.
-
-Response `201`: el ticket creado con `userId` y timestamps.
-
-### Códigos de error consistentes
+### Códigos de error
 
 | Código | Significado |
 |---|---|
@@ -589,15 +510,15 @@ Response `201`: el ticket creado con `userId` y timestamps.
 
 ```mermaid
 erDiagram
-    USER ||--o{ EVENT : "crea (1:N)"
-    USER ||--o{ TICKET : "emite (1:N)"
+    USER ||--o{ EVENT : crea
+    USER ||--o{ TICKET : emite
 
     USER {
         int id PK
         string name
         string email UK
         string passwordHash
-        string role "default: user"
+        string role
         datetime createdAt
         datetime updatedAt
     }
@@ -608,7 +529,7 @@ erDiagram
         text description
         string location
         datetime date
-        int userId FK "ON DELETE SET NULL"
+        int userId FK
         datetime createdAt
         datetime updatedAt
     }
@@ -617,9 +538,9 @@ erDiagram
         int id PK
         string name
         string email
-        string github "nullable"
-        text avatar "data URL nullable"
-        int userId FK "ON DELETE CASCADE"
+        string github
+        text avatar
+        int userId FK
         datetime createdAt
         datetime updatedAt
     }
@@ -645,28 +566,28 @@ Ticket.belongsTo(User, { foreignKey: "userId", as: "owner" });
 ```mermaid
 flowchart TD
     Start([Usuario abre la app]) --> Home[Visita Home]
-    Home --> Decision{¿Tiene cuenta?}
-    Decision -->|No| Register[/register]
-    Decision -->|Sí| Login[/login]
+    Home --> Decision{Tiene cuenta}
+    Decision -->|No| Register["Ruta /register"]
+    Decision -->|Si| Login["Ruta /login"]
     Register --> Token1[Recibe JWT y se guarda en Zustand persist]
     Login --> Token2[Recibe JWT y se guarda en Zustand persist]
     Token1 --> Eventos
     Token2 --> Eventos
 
-    Eventos[/eventos] --> CreaEvento[Click Nuevo evento]
-    CreaEvento --> FormEvento[Llena title/desc/location/date]
+    Eventos["Ruta /eventos"] --> CreaEvento[Click Nuevo evento]
+    CreaEvento --> FormEvento[Llena title description location y fecha]
     FormEvento --> POSTEvento[POST /api/events con userId del JWT]
     POSTEvento --> Eventos
 
     Home --> GeneraTicket[Click Generar mi ticket]
-    GeneraTicket --> FormTicket[Llena name/email/github + avatar]
+    GeneraTicket --> FormTicket[Llena name email github y avatar]
     FormTicket --> POSTTicket[POST /api/tickets con userId del JWT]
     POSTTicket --> Confirmacion[Confirmation Page muestra boarding pass]
 
-    Confirmacion --> MisTickets[/mis-tickets]
+    Confirmacion --> MisTickets["Ruta /mis-tickets"]
     Eventos --> MisTickets
 
-    MisTickets --> RefreshSafe[Refrescar la página sigue mostrando todo]
+    MisTickets --> RefreshSafe[Refrescar la pagina sigue mostrando todo]
 
     style Token1 fill:#FFEDD5,stroke:#FF7A00
     style Token2 fill:#FFEDD5,stroke:#FF7A00
@@ -677,57 +598,58 @@ flowchart TD
 
 ---
 
-## 12. Capturas del sistema
+## 12. Estructura del proyecto
 
-> Los archivos viven en `docs/images/`. Mientras no tengas las capturas reales, los placeholders SVG dan una idea del layout esperado. Reemplázalos por PNG 1920×1080 cuando estén listos.
-
-### Home — Hero con lava lamps
-
-![Home](./docs/images/01-home.svg)
-
-*El Hero invita al usuario a generar su ticket. Las 7 lava lamps cálidas (naranja, ámbar, coral, magenta, rosa, cyan acento) se mueven detrás del contenido con `mix-blend-mode: multiply` sobre el fondo `#F8FAFF`, creando mezcla cromática real cuando se solapan.*
-
-### Login
-
-![Login](./docs/images/02-login.svg)
-
-*Card glass premium con badge "Acceso", inputs con focus naranja, CTA `Iniciar sesion` con gradiente naranja → magenta y sombra cinematográfica.*
-
-### Registro
-
-![Registro](./docs/images/03-register.svg)
-
-*Mismo lenguaje visual que login. Tras el registro exitoso, el usuario es redirigido automáticamente a `/eventos`.*
-
-### Lista de eventos
-
-![Eventos](./docs/images/04-events.svg)
-
-*Cada evento se muestra como card glass con título, fecha, descripción y ubicación. Acciones inline para editar y eliminar. Cada usuario ve únicamente sus eventos.*
-
-### Formulario de creación de evento
-
-![Form evento](./docs/images/05-event-form.svg)
-
-*Modal inline para registrar un nuevo evento con título, descripción, ubicación y fecha. Validación en cliente con react-hook-form y en servidor con Zod.*
-
-### Mis tickets
-
-![Mis tickets](./docs/images/06-my-tickets.svg)
-
-*Boarding pass premium con vidrio claro, glow cálido exterior, separador perforado al color del canvas y datos personalizados del asistente.*
-
-### Confirmación tras generar ticket
-
-![Ticket generado](./docs/images/07-ticket-generated.svg)
-
-*Página de confirmación con saludo personalizado por gradiente y el ticket recién emitido en boarding pass.*
-
-### Swagger UI
-
-![Swagger](./docs/images/08-swagger.svg)
-
-*Documentación interactiva con autenticación JWT. Permite probar todos los endpoints sin escribir una línea de código adicional.*
+```
+conference-ticket-generator/
+├── .claude/                              # Launch configs locales
+│   └── launch.json
+├── docs/
+│   └── images/                           # Capturas referenciadas en el README
+│
+├── client/                               # ── FRONTEND (React + Vite) ──
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │   ├── auth/                     # login-form, register-form, protected-route
+│   │   │   ├── confirmation-page/        # congrats, ticket, ticket-card
+│   │   │   ├── events-list/              # events-list, event-form
+│   │   │   ├── layouts/                  # main-layout, starfield (lava lamps)
+│   │   │   └── ticket-form-page/         # hero + form/{text-input, upload-input, button}
+│   │   ├── contexts/                     # show-ticket
+│   │   ├── hooks/                        # use-show-ticket
+│   │   ├── pages/                        # home, events, login, register, my-tickets
+│   │   ├── services/                     # api, authService, eventService, ticketService
+│   │   ├── store/                        # auth (persist), user
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── index.html
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── .env.example
+│
+├── server/                               # ── BACKEND (Node + Express) ──
+│   ├── src/
+│   │   ├── config/                       # database, swagger
+│   │   ├── controllers/                  # auth, event, ticket (con ownership check)
+│   │   ├── middlewares/                  # auth, error, validateId
+│   │   ├── models/                       # User, Event, Ticket + asociaciones
+│   │   ├── routes/                       # auth, event, ticket
+│   │   ├── validators/                   # auth, event, ticket (Zod)
+│   │   ├── app.js                        # Factory createApp() — testeable
+│   │   └── index.js                      # Bootstrap: env + listen
+│   ├── tests/                            # 50 tests con Jest + Supertest
+│   ├── jest.config.js
+│   ├── package.json
+│   ├── .env.example
+│   └── .env                              # NO commiteado
+│
+├── .gitignore
+└── README.md
+```
 
 ---
 
@@ -746,11 +668,11 @@ npm run test:watch  # Modo watch
 ### Suites incluidas
 
 | Archivo | Cobertura | Tests |
-|---|---|---|
+|---|---|:---:|
 | `tests/health.test.js` | Bootstrap de Express + dialect SQLite | 2 |
-| `tests/auth.test.js` | Register, login, GET /me (happy, errores, bcrypt hashing, formatos de token) | 12 |
-| `tests/events.test.js` | CRUD eventos + protección JWT + 5 tests de aislamiento entre usuarios | 19 |
-| `tests/tickets.test.js` | CRUD tickets + protección JWT + 4 tests de aislamiento + orden DESC | 17 |
+| `tests/auth.test.js` | Register, login, GET /me | 12 |
+| `tests/events.test.js` | CRUD eventos + 5 tests de aislamiento entre usuarios | 19 |
+| `tests/tickets.test.js` | CRUD tickets + 4 tests de aislamiento + orden DESC | 17 |
 | **Total** | | **50** |
 
 ### Cómo funciona el entorno de test
@@ -760,42 +682,42 @@ npm run test:watch  # Modo watch
 - Cada suite hace `sequelize.sync({ force: true })` y un `truncate` por `beforeEach` para garantizar aislamiento.
 - `server/src/app.js` exporta una factory `createApp()` que Supertest importa sin levantar puerto real.
 
-### Ejemplo: prueba de aislamiento de tickets
+---
 
-```js
-describe("Aislamiento entre usuarios", () => {
-  let tokenA, tokenB, ticketA;
+## 14. Metodología
 
-  beforeEach(async () => {
-    /* registra usuarios A y B; A crea ticket */
-  });
+Durante el desarrollo se aplicaron conceptos de **Ingeniería de Software** vistos en la asignatura, organizando el trabajo en torno a los siguientes elementos:
 
-  it("User B no ve el ticket de A en su listado", async () => {
-    const res = await request(app)
-      .get("/api/tickets/me")
-      .set({ Authorization: `Bearer ${tokenB}` });
-    expect(res.body).toEqual([]);                  // ← prueba aislamiento real
-  });
+- **Product Backlog** — lista de funcionalidades priorizadas según los requisitos del profesor.
+- **Sprint Planning** — planeación por ciclos de trabajo en los que se definían las tareas a abordar.
+- **Sprint Management** — seguimiento del estado de cada tarea durante el sprint.
+- **GitHub Projects** — herramienta utilizada para gestionar el backlog y los sprints de forma colaborativa.
+- **Control de versiones con Git** — ramas de trabajo (`jesus-dev`) separadas de `main`, commits semánticos en español agrupados por funcionalidad, y un historial revisable de principio a fin.
 
-  it("User B recibe 403 al intentar eliminar ticket de A", async () => {
-    const res = await request(app)
-      .delete(`/api/tickets/${ticketA.id}`)
-      .set({ Authorization: `Bearer ${tokenB}` });
-    expect(res.status).toBe(403);
-  });
-});
-```
+La metodología no se aplicó como un proceso formal certificado, sino como un **ejercicio práctico** para experimentar con las herramientas y conceptos en un proyecto real del semestre.
 
 ---
 
-## 14. Decisiones de ingeniería de software
+## 15. Artefactos del proyecto
+
+Los artefactos de gestión asociados al proyecto se administraron mediante **GitHub Projects**, que ofrece una vista de tablero (kanban) y de tabla integrada con los issues y pull requests del repositorio.
+
+Como parte del trabajo se utilizaron:
+
+- **Product Backlog**
+- **Sprint 1**
+- **Sprint 3**
+- **Sprint Management**
+
+Estos elementos viven directamente en el espacio de **GitHub Projects** vinculado al repositorio, no como archivos dentro del código fuente. La consulta de los mismos se realiza desde la pestaña *Projects* del repositorio en GitHub, manteniendo el historial de cambios y movimientos de cada tarjeta.
+
+---
+
+## 16. Decisiones de ingeniería de software
 
 ### Por qué arquitectura cliente-servidor desacoplada
 
-El `client/` y `server/` viven en directorios independientes con `package.json` separados. Esto permite:
-- Desplegar cada uno en plataformas especializadas (Vercel/Netlify para SPAs, Render/Railway para APIs Node).
-- Iterar en frontend sin reiniciar el backend y viceversa.
-- Migrar el frontend a otro framework sin tocar el backend (las APIs son agnósticas).
+El `client/` y `server/` viven en directorios independientes con `package.json` separados. Esto permite desplegar cada uno en plataformas especializadas (Vercel/Netlify para SPAs, Render/Railway para APIs Node), iterar en frontend sin reiniciar el backend y viceversa, y migrar el frontend a otro framework sin tocar el backend.
 
 ### Por qué JWT en lugar de sesiones cookie-based
 
@@ -810,17 +732,17 @@ El `client/` y `server/` viven en directorios independientes con `package.json` 
 - **Middleware `persist` integrado**: una opción para persistir en localStorage.
 - **Sin Provider obligatorio**: cualquier componente accede directo al store.
 
-### Por qué Zod en lugar de Joi/Yup
+### Por qué Zod
 
 - **Inferencia de tipos TypeScript** desde el schema sin duplicación.
-- **Mensajes de error en español** definidos en el propio schema.
+- **Mensajes de error personalizados** definidos en el propio schema.
 - **API moderna** con `.parse()` y `.safeParse()`.
 
-### Por qué Sequelize sobre Prisma
+### Por qué Sequelize
 
 - Mayor portabilidad entre Postgres / MySQL / SQLite sin cambios de código.
 - No requiere paso de generación adicional al build.
-- Soporta perfectamente el uso de SQLite en memoria para tests, lo cual fue determinante para el suite de 50 pruebas.
+- Soporta el uso de SQLite en memoria para tests, lo cual fue determinante para el suite de 50 pruebas.
 
 ### Por qué Swagger desde JSDoc
 
@@ -834,81 +756,62 @@ Sobre fondo claro, `multiply` produce colores saturados como tinta o acuarela. C
 
 ---
 
-## 15. Retos encontrados
+## 17. Retos encontrados
 
-Durante el desarrollo aparecieron varios problemas no triviales que requirieron debugging profundo y refactorización deliberada. Los más relevantes documentados en el historial de commits:
+Durante el desarrollo aparecieron varios problemas no triviales que requirieron debugging profundo y refactorización deliberada.
 
-### 15.1 Render bloqueado por z-index negativo + background opaco
+### 17.1 Render bloqueado por z-index negativo
 
-**Síntoma:** el fondo decorativo se renderizaba (verificado con `console.log`) pero la pantalla seguía completamente plana, sin colores visibles.
+**Síntoma:** el fondo decorativo se renderizaba pero la pantalla seguía completamente plana.
 
-**Causa raíz:** el `<Starfield>` usaba `position: fixed inset-0 -z-10`. El selector `html, body, #root { background-color: #050816 }` aplicaba un fondo opaco al `#root`. Como el wrapper padre tenía `position: relative` **sin `z-index` ni `isolation`**, no creaba un nuevo stacking context, así que el `z-index: -10` del `Starfield` se escapaba al stacking context raíz del documento, donde quedaba **detrás del background sólido del `#root`**.
+**Causa raíz:** el `<Starfield>` usaba `position: fixed inset-0 -z-10`. El selector global aplicaba `background-color` al `#root`. Como el wrapper padre no creaba stacking context, el z-index negativo se escapaba al stacking context raíz y quedaba detrás del background sólido.
 
-**Diagnóstico:** se aplicó un test prescriptivo (`<div style="position:fixed; inset:0; background:red; z-index:999999">`) y se comprobó que el rojo SÍ aparecía con z-index positivo extremo pero NO con z-index negativo. Eso aisló la variable.
+**Corrección:** una línea en `main-layout.tsx`: agregar la utility `isolate` (Tailwind para `isolation: isolate`). Esto crea un stacking context que actúa como techo.
 
-**Corrección:** una sola línea en `main-layout.tsx`:
-```diff
-- <div className='relative min-h-screen ...'>
-+ <div className='relative isolate min-h-screen ...'>
-```
+### 17.2 Crash del backend tras refactor
 
-El `isolate` (utility de Tailwind para `isolation: isolate`) crea un stacking context que actúa como techo, evitando que el z-index negativo se escape.
+**Síntoma:** `[nodemon] app crashed` aparecía sin stack trace visible.
 
-### 15.2 Crash del backend tras refactor por unhandled rejection
+**Causa raíz:** `sequelize.sync()` no tenía `.catch()`. En Node 15+ una unhandled promise rejection mata el proceso.
 
-**Síntoma:** `[nodemon] app crashed` aparecía después de arrancar el server, sin stack trace visible. La consola mostraba los 3 mensajes de boot exitoso y luego se moría silenciosamente.
+**Corrección:** se agregaron `process.on('unhandledRejection')`, `process.on('uncaughtException')` y `.catch()` explícito a `sync()`. También se creó `error.middleware.js` central para garantizar respuestas JSON.
 
-**Causa raíz:** `sequelize.sync()` en `index.js` no tenía `.catch()`. En Node 15+ una unhandled promise rejection mata el proceso por defecto.
+### 17.3 Tickets desaparecían al refrescar
 
-**Corrección:** se agregaron handlers globales `process.on('unhandledRejection')` y `process.on('uncaughtException')` + `.catch()` explícito a `sync()`. También se creó `error.middleware.js` central para que todas las respuestas sean JSON consistentes (Express por defecto responde HTML en errores no manejados).
+**Síntoma:** los tickets generados aparecían temporalmente y desaparecían al refrescar.
 
-### 15.3 Tickets desaparecían al refrescar la página
+**Causa raíz:** el sistema de tickets era 100% client-side y vivía en memoria. `store/user.ts` no tenía `persist`, el avatar era `URL.createObjectURL` (blob URL efímera), y la tabla `Tickets` no existía en el backend.
 
-**Síntoma:** el usuario generaba un ticket, se mostraba correctamente, aparecía en `/mis-tickets`, refrescaba el navegador y todo desaparecía.
+**Corrección:** se creó la entidad Ticket en backend (modelo, validador, controller, rutas, Swagger, 17 tests), un `ticketService.ts` en frontend, se reescribió `MyTicketsPage` para consumir el backend y se cambió el avatar a data URL persistible.
 
-**Causa raíz auditoría completa:** el sistema de tickets era 100% client-side y vivía en memoria:
-- `store/user.ts` era Zustand **sin `persist`** → memoria RAM.
-- `ShowTicketContext` usaba `useState<boolean>` → memoria RAM.
-- El form `setUser()` + `setShowTicket(true)` **nunca llamaba al backend**.
-- El avatar era `URL.createObjectURL(file)` → blob URL efímera del navegador, ni siquiera serializable.
-- **La tabla `Tickets` no existía** en el backend.
+### 17.4 Cross-user data leak en eventos
 
-**Bug crítico adicional encontrado en el mismo audit:** `clearAuth()` no limpiaba `useUserStore`, así que al cerrar sesión User A e iniciar User B, **B veía los datos del ticket de A** porque el store local seguía intacto.
+**Síntoma:** todos los usuarios veían los mismos eventos.
 
-**Corrección:** se creó la entidad Ticket en backend (modelo + validador + controller + rutas + Swagger + 17 tests), un `ticketService.ts` en frontend, se reescribió `MyTicketsPage` para consumir el backend, se cambió el avatar a data URL persistible, y se hizo que `clearAuth()` limpiara también el user store. La separación entre usuarios se validó con 4 tests automatizados de aislamiento.
+**Causa raíz:** el modelo `Event` no tenía `userId` ni asociación. Las rutas eran completamente públicas.
 
-### 15.4 Cross-user data leak en eventos
+**Corrección:** se agregó `userId` con FK, se declararon las asociaciones, se aplicó `authMiddleware` a las 5 rutas, se filtró por `WHERE userId = req.user.id`, y se agregó ownership check con respuesta 403. Reforzado con 5 tests de aislamiento.
 
-**Síntoma:** al iniciar sesión con cualquier usuario, todos veían los mismos eventos.
+### 17.5 Crash falso por procesos zombie
 
-**Causa raíz:** el modelo `Event` no tenía columna `userId` ni asociación Sequelize. Las rutas `/api/events/*` eran **completamente públicas** sin `authMiddleware`. `getEvents` hacía `Event.findAll()` global.
+**Síntoma:** `[nodemon] app crashed` aunque el código estaba intacto y los tests pasaban.
 
-**Corrección:** se agregó `userId` con FK (preservando los 5 eventos legacy con `userId = NULL`), se declararon las relaciones `User.hasMany(Event)` y `Event.belongsTo(User)`, se aplicó `authMiddleware` a las 5 rutas, se filtró `getEvents` por `WHERE userId = req.user.id`, y se agregó ownership check con respuesta 403 en `GET /:id`, `PUT` y `DELETE`. Reforzado con 5 tests de aislamiento.
+**Causa raíz:** procesos node de iteraciones previas seguían vivos. Uno retenía el puerto 3000, así que el `app.listen(3000)` fallaba con `EADDRINUSE`.
 
-### 15.5 Crash falso por procesos zombie
-
-**Síntoma:** al ejecutar `npm run dev`, nodemon imprimía `[nodemon] app crashed` aunque el código fuente estaba intacto y los tests pasaban.
-
-**Causa raíz:** 5 procesos node de iteraciones previas (preview servers, instancias zombie de horas anteriores) seguían vivos. Uno de ellos retenía el puerto 3000, así que el `app.listen(3000)` de la nueva instancia fallaba con `EADDRINUSE` y nodemon reportaba "app crashed".
-
-**Corrección:** se ejecutó `Get-Process node | Stop-Process -Force` para limpiar los zombies y se documentó el comando en este README. **No había ningún bug en el código**.
+**Corrección:** `Get-Process node | Stop-Process -Force` para limpiar zombies. No había bug en el código.
 
 ---
 
-## 16. Resultados obtenidos
-
-### Métricas finales
+## 18. Resultados obtenidos
 
 | Métrica | Valor |
 |---|---|
-| Commits semánticos | 56 |
+| Commits semánticos | 60+ |
 | Archivos fuente backend | 18 |
 | Archivos fuente frontend | 27 |
-| Líneas de código backend (sin tests) | ~1,400 |
-| Líneas de código frontend (sin assets) | ~2,800 |
 | Tests automatizados | 50 (todos pasando) |
 | Endpoints REST documentados | 12 |
-| Tiempo de build frontend | ~280 ms (Vite + rolldown) |
+| Tiempo de build frontend | ~280 ms |
 | Tamaño bundle JS gzipped | ~112 KB |
 | Tamaño bundle CSS gzipped | ~7.3 KB |
 | Tiempo total de la suite de tests | ~7.5 segundos |
@@ -916,95 +819,75 @@ El `isolate` (utility de Tailwind para `isolation: isolate`) crea un stacking co
 ### Funcionalidades entregadas
 
 - ✅ Sistema completo de autenticación JWT con persistencia y auto-logout.
-- ✅ CRUD de eventos aislado por usuario con validación dual (Zod + react-hook-form).
-- ✅ Sistema de tickets persistente con boarding pass premium y data URL para avatar.
-- ✅ Documentación API interactiva con Swagger UI y spec OpenAPI 3.0.3.
-- ✅ Suite de tests con SQLite en memoria garantizando aislamiento total.
-- ✅ Tema visual luminoso premium con 7 lava lamps animadas vía `mix-blend-mode: multiply`.
+- ✅ CRUD de eventos aislado por usuario con validación dual.
+- ✅ Sistema de tickets persistente con boarding pass premium.
+- ✅ Documentación API interactiva con Swagger UI.
+- ✅ Suite de tests con SQLite en memoria.
+- ✅ Tema visual luminoso premium con lava lamps animadas.
 - ✅ Estructura preparada para deploy en plataformas modernas.
 
 ---
 
-## 17. Trabajo en equipo
+## 19. Equipo
 
-### Participantes
+### Integrantes
 
-| Integrante | Rol principal |
-|---|---|
-| **Jesús Grangeno García** | Desarrollo fullstack, arquitectura, autenticación, gestión del repositorio |
-| **César Eduardo Martínez Arredondo** | Documentación técnica, pruebas funcionales, revisión de UX |
+- **Jesús Grangeno García**
+- **César Eduardo Martínez Arredondo**
 
-### Contribuciones reflejadas en Git
+El proyecto se desarrolló de forma colaborativa a lo largo del semestre. Durante las horas de clase se realizaron reuniones periódicas para coordinar el avance, dividir actividades, revisar lo construido y apoyar la integración de los módulos entre los integrantes del equipo.
 
-El historial de commits del repositorio `JesusGG2109/ticket-generator` muestra **63 commits firmados por `JesusGG2109`**, además de 6 commits ancestros de la plantilla base de la cual se forkó el proyecto. La línea de trabajo se concentra en la rama `jesus-dev` con commits semánticos en español agrupados por funcionalidad (autenticación, CRUD, testing, documentación, diseño).
+Las contribuciones realizadas durante el desarrollo quedan reflejadas en el historial de commits del repositorio, accesible mediante:
 
 ```bash
-$ git shortlog -s -n
-    63  JesusGG2109
-     4  CodinGitHub        # autores de la plantilla base original
-     1  CodingTube
-     1  Davichobits
+git log --pretty=format:"%h %an %ad %s" --date=short
+git shortlog -s -n
 ```
 
-César Eduardo Martínez Arredondo participó en las revisiones funcionales y en la elaboración de la documentación técnica fuera del sistema de control de versiones.
-
-### Metodología de trabajo
-
-- **Trabajo por ramas**: toda la implementación nueva en `jesus-dev`. `main` queda intacta hasta validación.
-- **Commits atómicos**: cada commit cubre una funcionalidad coherente con mensaje en español describiendo el "qué" (no el "cómo").
-- **Workflow incremental**: cada fase (autenticación → CRUD eventos → tickets → tema visual) es independiente y revertible.
+> El detalle granular de qué integrante realizó cada commit puede consultarse directamente en GitHub. Esta sección documenta únicamente el hecho colaborativo, sin asignar porcentajes de participación ni roles formales que no fueron definidos explícitamente durante el desarrollo.
 
 ---
 
-## 18. Conclusiones
+## 20. Conclusiones
 
-El proyecto **EventHub TECNM** demuestra de forma práctica los principios fundamentales de la **Ingeniería de Software** aplicados a un sistema web fullstack de complejidad moderada. La construcción se realizó de forma incremental, con 56 commits semánticos que documentan cada decisión técnica y su justificación, lo cual permite auditar el proceso de desarrollo de principio a fin.
+El proyecto **EventHub TECNM** demuestra de forma práctica los principios fundamentales de la **Ingeniería de Software** aplicados a un sistema web fullstack de complejidad moderada. La construcción se realizó de forma incremental, con commits semánticos en español que documentan cada decisión técnica y su justificación, lo cual permite auditar el proceso de desarrollo de principio a fin.
 
-La separación clara entre frontend y backend en directorios independientes no fue una decisión estética sino una **decisión arquitectónica deliberada**: facilita el despliegue independiente, permite que cada capa evolucione a su propio ritmo y refleja la realidad industrial donde APIs y SPAs viven en infraestructuras distintas. La aplicación de patrones clásicos (MVC + Validators en backend, Service Layer + Interceptors en frontend, App Factory para testabilidad) demuestra que las soluciones probadas en la industria son perfectamente trasladables a un proyecto académico, sin sacrificar claridad ni mantenibilidad.
+La separación clara entre frontend y backend en directorios independientes no fue una decisión estética sino una **decisión arquitectónica deliberada**: facilita el despliegue independiente, permite que cada capa evolucione a su propio ritmo y refleja la realidad industrial donde APIs y SPAs viven en infraestructuras distintas. La aplicación de patrones clásicos (MVC + Validators en backend, Service Layer + Interceptors en frontend, App Factory para testabilidad) demuestra que las soluciones probadas en la industria son perfectamente trasladables a un proyecto académico.
 
-El proceso reveló problemas no triviales que solo aparecen en sistemas reales: stacking contexts CSS que ocultan elementos visualmente correctos, unhandled promise rejections que matan procesos silenciosamente, blob URLs que se evaporan al refrescar, y data leaks entre usuarios por ausencia de filtros en queries. Cada uno de estos retos fue **diagnosticado con metodología sistemática** (reproducir, aislar, hipotetizar, validar, corregir) en lugar de aplicar parches superficiales. Las correcciones se documentaron en commits específicos para que sirvan de referencia futura.
+El proceso reveló problemas no triviales que solo aparecen en sistemas reales: stacking contexts CSS que ocultan elementos visualmente correctos, unhandled promise rejections que matan procesos silenciosamente, blob URLs que se evaporan al refrescar, y data leaks entre usuarios por ausencia de filtros en queries. Cada uno de estos retos fue **diagnosticado con metodología sistemática** (reproducir, aislar, hipotetizar, validar, corregir) en lugar de aplicar parches superficiales.
 
-La **suite de 50 tests automatizados** con Jest + Supertest contra una base SQLite en memoria es probablemente el aporte más relevante desde la perspectiva de Ingeniería de Software. Demuestra que es posible escribir tests rápidos, aislados y deterministas para una API completa sin depender de bases de datos externas ni procesos paralelos. Los 5 tests específicos de **aislamiento entre usuarios** (donde User A crea recursos, User B intenta accederlos, y se valida que reciba 403) representan la prueba viva del compromiso del sistema con la seguridad multiusuario.
+La **suite de 50 tests automatizados** con Jest + Supertest contra una base SQLite en memoria es probablemente el aporte más relevante desde la perspectiva de Ingeniería de Software. Demuestra que es posible escribir tests rápidos, aislados y deterministas para una API completa sin depender de bases de datos externas. Los tests específicos de aislamiento entre usuarios representan la prueba viva del compromiso del sistema con la seguridad multiusuario.
 
-El último aspecto, la **dirección visual del producto**, se construyó como ejercicio de iteración crítica: se exploraron al menos seis estilos distintos (espacial, reactor energético, horizonte digital, SaaS premium oscuro, luminoso con auroras y finalmente lava lamps cálidas) antes de converger en una identidad coherente con los objetivos académicos del proyecto. Esta búsqueda visual, lejos de ser superficial, demuestra que la **experiencia del usuario es un componente medible** del software profesional y que la calidad técnica debe acompañarse de una capa visual digna del producto. La meta no era impresionar con efectos, sino transmitir confianza: que la aplicación pueda mirarse y sentirse como un producto pensado, no como un prototipo escolar genérico.
-
-En conjunto, EventHub TECNM no es solo un cumplimiento de los requisitos de la asignatura, sino una pequeña pieza de portafolio que ilustra cómo se diseña, construye, prueba, documenta y mantiene una aplicación web moderna desde cero, con criterios profesionales aplicables al mundo laboral.
+La **dirección visual del producto** se construyó como ejercicio de iteración crítica: se exploraron varios estilos antes de converger en una identidad luminosa coherente. Esta búsqueda demuestra que la **experiencia del usuario es un componente medible** del software profesional y que la calidad técnica debe acompañarse de una capa visual digna del producto. En conjunto, EventHub TECNM cumple los requisitos de la asignatura mientras ilustra cómo se diseña, construye, prueba, documenta y mantiene una aplicación web moderna con criterios profesionales aplicables al mundo laboral.
 
 ---
 
-## 19. Futuras mejoras
+## 21. Futuras mejoras
 
 ### Funcionalidad
-- [ ] **Roles y autorización**: añadir `admin` con permisos elevados (ver todos los eventos, eliminar tickets ajenos).
-- [ ] **Asociación User ↔ Event en UI**: mostrar el nombre del organizador en cada card.
+- [ ] **Roles y autorización** con `admin` y permisos elevados.
 - [ ] **Filtros avanzados** de eventos por rango de fecha, ubicación, palabras clave.
-- [ ] **Paginación** en `GET /events` y `GET /tickets/me` con `?limit=&offset=` (importante con muchos registros).
+- [ ] **Paginación** en `GET /events` y `GET /tickets/me`.
 - [ ] **Notificaciones por correo** al generar un ticket o al acercarse la fecha del evento.
-- [ ] **Generación de PDF** del boarding pass para descarga / impresión.
+- [ ] **Generación de PDF** del boarding pass.
 - [ ] **Código QR único** por ticket para validación en el evento.
-- [ ] **Dashboard de organización** con métricas (eventos activos, tickets emitidos, asistentes únicos).
-- [ ] **Búsqueda de eventos públicos** para usuarios que quieran inscribirse.
+- [ ] **Dashboard de organización** con métricas.
 
 ### Calidad técnica
-- [ ] **Tipos compartidos** entre cliente y servidor (workspace npm con paquete `shared`).
+- [ ] **Tipos compartidos** entre cliente y servidor.
 - [ ] **Tests automatizados frontend** con Vitest + React Testing Library.
-- [ ] **CI básico** con GitHub Actions (lint + build + test en PR).
-- [ ] **Migraciones Sequelize** en lugar de `sync()` para producción real.
-- [ ] **Rate limiting** en endpoints públicos (`express-rate-limit`).
-- [ ] **Helmet** para headers de seguridad estándar.
-- [ ] **Compresión gzip/brotli** del bundle Vite.
-- [ ] **Service Worker / PWA** para soporte offline básico.
+- [ ] **CI** con GitHub Actions (lint + build + test).
+- [ ] **Migraciones Sequelize** en lugar de `sync()` para producción.
+- [ ] **Rate limiting** y **Helmet** para endpoints públicos.
 
 ### Infraestructura
-- [ ] **Deploy real** en Render (backend) + Vercel (frontend).
+- [ ] **Deploy** en Render (backend) + Vercel (frontend).
 - [ ] **Docker Compose** para arrancar Postgres + backend + frontend con un solo comando.
-- [ ] **Variables de entorno gestionadas** con un secret manager (1Password / Doppler).
 - [ ] **Monitoring** con Sentry o similar.
-- [ ] **Backups automáticos** de la base de datos.
 
 ---
 
-## 20. Licencia
+## 22. Licencia
 
 Proyecto académico desarrollado para la asignatura de **Ingeniería de Software** en el **Tecnológico Nacional de México**. Uso libre con fines educativos citando la fuente y a los autores.
 
@@ -1012,10 +895,10 @@ Proyecto académico desarrollado para la asignatura de **Ingeniería de Software
 
 <div align="center">
 
-**EventHub TECNM** — *Ingeniería de Software 2026*
+**EventHub TECNM** · *Ingeniería de Software*
 
 Jesús Grangeno García · César Eduardo Martínez Arredondo
 
-[Reportar issue](https://github.com/JesusGG2109/ticket-generator/issues) · [Ver código](https://github.com/JesusGG2109/ticket-generator)
+[Reportar issue](https://github.com/JesusGG2109/ticket-generator/issues) · [Ver código](https://github.com/JesusGG2109/ticket-generator) · [GitHub Projects](https://github.com/JesusGG2109/ticket-generator/projects)
 
 </div>
