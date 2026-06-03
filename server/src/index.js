@@ -13,31 +13,21 @@ process.on("uncaughtException", (error) => {
 
 const app = createApp();
 
-const isProd = process.env.NODE_ENV === "production";
-
 sequelize
   .authenticate()
-  .then(() => {
+  .then(async () => {
     console.log("Base de datos conectada");
+
+    await sequelize.sync({ alter: true });
+
+    console.log("Tablas sincronizadas");
   })
   .catch((error) => {
-    console.error("Error de conexion a la base de datos:", error.message);
+    console.error(
+      "Error de conexion o sincronizacion:",
+      error.message
+    );
   });
-
-if (!isProd) {
-  sequelize
-    .sync()
-    .then(() => {
-      console.log("Tablas sincronizadas");
-    })
-    .catch((error) => {
-      console.error("Error sincronizando tablas:", error.message);
-    });
-} else {
-  console.log(
-    "Modo produccion: omitiendo sequelize.sync(). Usar migraciones para cambios de esquema."
-  );
-}
 
 const PORT = process.env.PORT || 3000;
 
